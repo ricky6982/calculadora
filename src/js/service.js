@@ -3,31 +3,33 @@
  */
 Calculadora.$inject = ['$rootScope'];
 function Calculadora($rootScope){
-    var variables = {
-        a: 1,
-        b: 2,
-        c: "b"
-    };
+    var variables = {};
 
-    function replaceVariables(formula){
-        
-    }
-
-    function processFormula(formula, resultado){
-
-        return true;
-    }
-
-    calcular = function(formula){
-        if (processFormula(formula)) {
-            return $rootScope.$eval(formula);
+    calcular = function(variable){
+        if (processFormula(variable)) {
+            return $rootScope.$eval(variable);
         }else{
             return 'Error';
         }
     };
 
+    addVar = function(nuevaVariable){
+
+    };
+
+    editVar = function(variable, value){
+
+    };
+
+    deleteVar = function(variable, value){
+
+    };
+
     return {
         variables: variables,
+        addVar: addVar,
+        editVar: editVar,
+        deleteVar: deleteVar,
         calcular: calcular,
     };
 }

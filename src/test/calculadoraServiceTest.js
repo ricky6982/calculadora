@@ -8,8 +8,16 @@ describe('Prueba del Servicio de la Calculadora', function() {
         service = $injector.get('Calculadora');
     }));
 
-    it('Obteniendo valores de variables del servicio', function() {
-        expect(service.variables.a).toEqual(1);
-        expect(service.variables.b).toEqual(2);
+    it('Agregando variables a la calculadora', function() {
+        
     });
+
+    it('Editando variables de la calculadora', function() {
+        
+    });
+
+    it('Eliminando variables de la calculadora', function() {
+        
+    });
+
 });

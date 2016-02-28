@@ -1,15 +1,18 @@
 Calculadora con variables
 =========================
 
-Requerimientos de la calculadora
- - Setear variables -> no permite variables con nombres repetidos
- - Evaluar formular -> Boton Calcular
- - una formula se almacena en una variable
+Funciones de la calculadora
+
+ - Agregar variables -> no permite variables con nombres repetidos ya que se sobreescriben.
+ - Evaluar formula -> Boton Calcular
+ - Una formula se almacena como una variable
+ - Una formula puede tener dependencias con otras variables
+ - No se agrega una formula ni se modifica una formula si se produce una referencia ciclica.
 
 La calculadora tendra un contexto en el cual se almacenan todas las variables y formulas (tambien variables), de tal modo que se pueden utilizar las formulas creadas para crear otra formula.
- - Problema: Que pasa si se elimina la formula y esta esta siendo utilizada por otra formula?
 
  Al abrir la calculadora estará asociada a una formula si o si, es decir, la calculadora edita una variable guardada en su contexto:
+
     calc.variables = [
         "sueldo_basico": {
             "formula": "4567.50"
@@ -66,3 +69,8 @@ Directiva Campo con boton para abrir la calculadora
     El campo numerico tendra dos estados:
       - Editable cuando la formula solo tiene un valor numerico
       - No Editable cuando la formula es compuesta
+
+Problemas
+---------
+    Que pasa si se elimina la formula y esta esta siendo utilizada por otra formula?
+ 
