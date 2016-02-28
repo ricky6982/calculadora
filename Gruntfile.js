@@ -83,7 +83,7 @@ module.exports = function (grunt){
                 tasks: ['html2js', 'concat', 'jshint']
             },
             js: {
-                files: ['<%= buildsrc %>/js/**/*.js', '<%= buildsrc %>/lib/**/*.js'],
+                files: ['<%= buildsrc %>/js/**/*.js'],
                 tasks: ['concat', 'uglify', 'jshint'],
             },
             karma: {

@@ -45,6 +45,7 @@ function toposort(nodes, edges) {
   var sorted = new Array(cursor);
   var visited = {};
   var i = cursor;
+  var cyclicDependency;
 
   while (i--) {
     if (!visited[i]) visit(nodes[i], i, []);
@@ -95,22 +96,13 @@ function uniqueNodes(arr){
 function hasCyclicDependency(dependencias){
   try{
     toposort(uniqueNodes(dependencias), dependencias );
+    cyclicDependencyIn = "";
     return false;
   }catch(e){
-    return e;
+    cyclicDependencyIn = e;
+    return true;
   }
 }
-
-// Code Example
-// var dependencias = [
-//   ['b', 'a'],
-//   ['b'],
-//   ['a', 'c'],
-//   ['b', 'c'],
-//   ['c', 'd'],
-// ];
-// console.log(hasCyclicDependency(dependencias));
-
 
 // Función que transforma un Objeto de definición de variables
 // a un graph para procesar sus dependencias ciclicas.
@@ -132,22 +124,55 @@ function hasCyclicDependency(dependencias){
 //      [b,c],
 //      [c,d]
 //    ]
-function makeGraph(variables){
-  return [
-     ['b','a'],
-     ['b'],
-     ['a','c'],
-     ['b','c'],
-     ['c','d']
-  ];
+function makeGraph(obj){
+  var result = [];
+  angular.forEach(obj, function(item, key){
+    angular.forEach(item, function(dependency){
+      result.push([dependency, key]);
+    });
+  });
+
+  return result;
 }
 
-variable = 1;
-makeGraph(variable);
+//  Función que extrae las dependencias de cada variable declarada
+//    Ejemplo: 
+//      variables = {
+//          a: "b + 4 + c",
+//          b: "45",
+//          c: "12",
+//          d: "a + b * 4 * c"
+//      }
+//    Resultado:
+//      objDependency = {
+//          a: ['b', 'c'],
+//          b: [],
+//          c: [],
+//          d: ['a', 'b', 'c']
+//      }
+function makeObjectDependency(obj)
+{
+  var objDep = {};
+  angular.forEach(obj, function(formula, variable){
+    formula = " " + formula + " ";
+     var vectorDependencias = formula
+                      .replace(/[-!$%^&*+|~=`{}\[\]:";'<>?,\/]/g, ' ')
+                      .replace(/\s[0-9]+(\.[0-9]+)?\s/g,' ')
+                      .replace(/\s\s+/g, ' ')
+                      .split(' ')
+                    ;
 
-console.log(hasCyclicDependency(makeGraph(variable)));
+    vectorDependencias = $.unique(vectorDependencias.filter(Boolean));
+
+    objDep[variable] = vectorDependencias;
+  });
+
+  return objDep;
+}
+
 
 angular.module('calculadora', ['calculadora.templates']);
+
 
 /**
  * Servicio de Calculadora
@@ -184,8 +209,6 @@ function Calculadora($rootScope){
 }
 
 angular.module('calculadora').factory('Calculadora', Calculadora);
-
-
 /**
  * Directiva que muestra la calculadora
  */

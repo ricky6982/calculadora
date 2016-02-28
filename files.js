@@ -1,8 +1,10 @@
 routerFiles = {
   src: [
     'src/js/template.js',
-    'src/lib/toposort.js',
-    'src/js/calculadora.js',
+    'src/js/toposort.js',
+    'src/js/common.js',
+    'src/js/service.js',
+    'src/js/directive.js',
   ]
 };
 

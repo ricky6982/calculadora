@@ -19,6 +19,7 @@ module.exports = function(config) {
       './bower_components/angular/angular.min.js',
       './bower_components/angular-mocks/angular-mocks.js',
       './dist/calculadora.js',
+      './src/js/toposort.js',
       './src/test/*.js'
     ],
 
