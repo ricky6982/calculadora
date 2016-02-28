@@ -4,6 +4,7 @@ routerFiles = {
     'src/js/toposort.js',
     'src/js/common.js',
     'src/js/service.js',
+    'src/js/controller.js',
     'src/js/directive.js',
   ]
 };

@@ -13,20 +13,49 @@ angular.module("template/calculadora.tpl.html", []).run(["$templateCache", funct
     "<div class=\"row well\">\n" +
     "    <h1>Calculadora</h1>\n" +
     "    <div class=\"col-sm-6\">\n" +
-    "        <div class=\"form-group\">\n" +
-    "            <input type=\"text\" ng-model=\"formula\" class=\"form-control input-lg\">\n" +
+    "        <div ng-hide=\"modoEdicion\">\n" +
+    "          <!-- Modo Edición -->\n" +
+    "          <div class=\"form-group\">\n" +
+    "              <input type=\"text\" ng-model=\"formula\" class=\"form-control input-lg\" disabled>\n" +
+    "          </div>\n" +
+    "          <div class=\"form-inline form-group\">\n" +
+    "              <label for=\"\">Nombre de la variable</label>\n" +
+    "              <input type=\"text\" ng-model=\"nombreVariable\" class=\"form-control\">\n" +
+    "              <button ng-click=\"guardar()\">Guardar</button>\n" +
+    "          </div>\n" +
     "        </div>\n" +
-    "        <div class=\"form-group\">\n" +
-    "            <input type=\"text\" ng-model=\"resultado\" class=\"form-control\">\n" +
+    "        <div ng-show=\"modoEdicion\">\n" +
+    "          <!-- Modo Normal -->\n" +
+    "          <div class=\"form-inline form-group\">\n" +
+    "              <label for=\"\">{{ editVar }}</label>\n" +
+    "              <input type=\"text\" ng-model=\"formula\" class=\"form-control input-lg\" disabled>\n" +
+    "          </div>\n" +
+    "          <div class=\"form-group\">\n" +
+    "              <button>Guardar cambios</button>\n" +
+    "              <button ng-click=\"modoNormal()\">Volver a modo normal</button>\n" +
+    "          </div>\n" +
     "        </div>\n" +
+    "\n" +
+    "        <div class=\"form-inline form-group\">\n" +
+    "            <label for=\"\">Resultado</label>\n" +
+    "            <input type=\"text\" ng-model=\"resultado\" class=\"form-control\" disabled>\n" +
+    "        </div>\n" +
+    "\n" +
     "        <div class=\"row\">\n" +
+    "            <!-- Teclado Numerico -->\n" +
     "            <div class=\"col-sm-6\">\n" +
     "                <button>7</button><button>8</button><button>9</button><button>/</button><button>(</button> <br>\n" +
     "                <button>4</button><button>5</button><button>6</button><button>*</button><button>)</button> <br>\n" +
     "                <button>1</button><button>2</button><button>3</button><button>-</button> <br>\n" +
     "                <button>0</button><button>+</button><button ng-click=\"calcular()\">=</button>\n" +
     "            </div>\n" +
-    "            <div class=\"col-sm-6\">variables</div>\n" +
+    "            <!-- Teclas de Variables -->\n" +
+    "            <div class=\"col-sm-6\">\n" +
+    "                <legend>Variables</legend>\n" +
+    "                <div ng-repeat=\"(key, value) in variables\">\n" +
+    "                    <button>{{ key }}</button><button ng-click=\"editar(key)\"><i class=\"glyphicon glyphicon-pencil\"></i></button>\n" +
+    "                </div>\n" +
+    "            </div>\n" +
     "        </div>\n" +
     "    </div>\n" +
     "</div>");
@@ -59,7 +88,7 @@ function toposort(nodes, edges) {
     var child;
 
     if (predecessors.indexOf(node) >= 0) {
-      throw JSON.stringify(node);
+      throw 'Referencia ciclica en '+JSON.stringify(node);
     }
 
     if (visited[i]) return;
@@ -180,6 +209,16 @@ angular.module('calculadora', ['calculadora.templates']);
 Calculadora.$inject = ['$rootScope'];
 function Calculadora($rootScope){
     var variables = {};
+    var msjError;
+
+    function areCorrectVariables(obj){
+        objDep = makeObjectDependency(obj);
+        if (hasCyclicDependency(makeGraph(objDep))) {
+            return false;
+        }
+
+        return true;
+    }
 
     calcular = function(variable){
         if (processFormula(variable)) {
@@ -189,8 +228,26 @@ function Calculadora($rootScope){
         }
     };
 
-    addVar = function(nuevaVariable){
+    addVar = function(variable, value){
+        msjError = "";
+        if (typeof value === "undefined") {
+            value = "";
+        }
+        if (typeof variables[variable] !== "undefined") {
+            msjError = "La variable ya esta definida";
+            return false;
+        }
 
+        aux = angular.copy(variables);
+        aux[variable] = value;
+        if (areCorrectVariables(aux)) {
+            variables[variable] = value;
+            return true;
+        }
+
+        msjError = cyclicDependencyIn;
+        console.log(msjError);
+        return false;
     };
 
     editVar = function(variable, value){
@@ -212,30 +269,49 @@ function Calculadora($rootScope){
 
 angular.module('calculadora').factory('Calculadora', Calculadora);
 /**
+ * Definición de la Controlador de la Calculadora
+ */
+angular.module('calculadora')
+    .controller('calculadoraCtrl', [
+        '$scope', 'Calculadora',
+        function($scope, Calculadora){
+            $scope.formula = "6*5";
+            $scope.modoEdicion = false;
+            $scope.editVar = "";
+            $scope.variables = Calculadora.variables;
+
+            $scope.calcular = function(){
+                $scope.resultado = Calc.calcular($scope.formula);
+            };
+
+            $scope.guardar = function(){
+                Calculadora.addVar($scope.nombreVariable, $scope.formula);
+            };
+
+            $scope.editar = function(variable){
+                $scope.modoEdicion = true;
+                $scope.editVar = variable;
+                $scope.formula = $scope.variables[variable];
+            };
+
+            $scope.modoNormal = function(){
+                $scope.modoEdicion = false;
+                $scope.editVar = "";
+                $scope.formula = "";
+            };
+        }
+    ])
+;
+/**
  * Directiva que muestra la calculadora
  */
 calculadoraDirective.$inject = ['$injector'];
 function calculadoraDirective($injector){
-    var scope = {
-
-    };
-
-    controller.$inject = ['$scope', 'Calculadora'];
-    function controller($scope, Calc){
-        $scope.formula = "6*5";
-
-        $scope.calcular = function(){
-            $scope.resultado = Calc.calcular($scope.formula);
-            console.log(Calc.variables.a);
-        };
-    }
-
     return {
         restrict: 'AE',
         replace: true,
         templateUrl: 'template/calculadora.tpl.html',
-        scope: scope,
-        controller: controller,
+        controller: 'calculadoraCtrl',
     };
 }
 

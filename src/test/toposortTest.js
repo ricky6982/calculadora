@@ -12,7 +12,7 @@ describe('Prueba de funciones de la libreria Toposort', function() {
 
         graph.push(['e', 'a']);
         expect(hasCyclicDependency(graph)).toBe(true);
-        expect(cyclicDependencyIn).toBe('"e"');
+        expect(cyclicDependencyIn).toEqual('Referencia ciclica en "e"');
     });
 
     it('Conversion de Objeto a Array - funcion makeGraph()', function() {

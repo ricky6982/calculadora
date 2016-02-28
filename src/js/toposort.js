@@ -25,7 +25,7 @@ function toposort(nodes, edges) {
     var child;
 
     if (predecessors.indexOf(node) >= 0) {
-      throw JSON.stringify(node);
+      throw 'Referencia ciclica en '+JSON.stringify(node);
     }
 
     if (visited[i]) return;
