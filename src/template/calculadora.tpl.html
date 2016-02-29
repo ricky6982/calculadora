@@ -20,7 +20,7 @@
           </div>
           <div class="form-group">
               <button>Guardar cambios</button>
-              <button ng-click="modoNormal()">Volver a modo normal</button>
+              <button ng-click="modoNormal()">Modo Normal</button>
           </div>
         </div>
 
@@ -41,7 +41,9 @@
             <div class="col-sm-6">
                 <legend>Variables</legend>
                 <div ng-repeat="(key, value) in variables">
-                    <button>{{ key }}</button><button ng-click="editar(key)"><i class="glyphicon glyphicon-pencil"></i></button>
+                    <button>{{ key }}</button>
+                    <button ng-click="editar(key)"><i class="glyphicon glyphicon-pencil"></i></button>
+                    <button ng-click="eliminar(key)"><i class="glyphicon glyphicon-trash"></i></button>
                 </div>
             </div>
         </div>

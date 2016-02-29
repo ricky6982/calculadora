@@ -24,7 +24,7 @@ angular.module("template/calculadora.tpl.html", []).run(["$templateCache", funct
     "          </div>\n" +
     "          <div class=\"form-group\">\n" +
     "              <button>Guardar cambios</button>\n" +
-    "              <button ng-click=\"modoNormal()\">Volver a modo normal</button>\n" +
+    "              <button ng-click=\"modoNormal()\">Modo Normal</button>\n" +
     "          </div>\n" +
     "        </div>\n" +
     "\n" +
@@ -45,7 +45,9 @@ angular.module("template/calculadora.tpl.html", []).run(["$templateCache", funct
     "            <div class=\"col-sm-6\">\n" +
     "                <legend>Variables</legend>\n" +
     "                <div ng-repeat=\"(key, value) in variables\">\n" +
-    "                    <button>{{ key }}</button><button ng-click=\"editar(key)\"><i class=\"glyphicon glyphicon-pencil\"></i></button>\n" +
+    "                    <button>{{ key }}</button>\n" +
+    "                    <button ng-click=\"editar(key)\"><i class=\"glyphicon glyphicon-pencil\"></i></button>\n" +
+    "                    <button ng-click=\"eliminar(key)\"><i class=\"glyphicon glyphicon-trash\"></i></button>\n" +
     "                </div>\n" +
     "            </div>\n" +
     "        </div>\n" +
