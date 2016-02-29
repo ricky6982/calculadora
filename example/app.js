@@ -3,17 +3,13 @@ var app = angular.module('app', ['calculadora']);
 app.controller('AppCtrl', [
     '$scope', 'Calculadora', '$timeout',
     function($scope, Calculadora, $timeout){
-        Calculadora.addVar("sueldo_basico", "4567.89");
-        console.log(Calculadora.variables);
-        $timeout(function(){
-            Calculadora.addVar("jubilacion", "4567.89");
-        }, 5000);
-        $timeout(function(){
-            Calculadora.addVar("jubilacion", "4567.89");
-        }, 10000);
-        $timeout(function(){
-            Calculadora.addVar("antiguedad", "sueldo_basico * 3 / 100");
-            console.log(Calculadora.variables);
-        }, 13000);
+        Calculadora.addVar("sueldo_basico", "200");
+        Calculadora.addVar("jubilacion", "sueldo_basico + 55");
+        Calculadora.addVar("antiguedad", "jubilacion * 3 / 100");
+        
+        $scope.calcular = function(){
+            resultado = Calculadora.calcular('antiguedad');
+            console.log(resultado);
+        };
     }
 ]);

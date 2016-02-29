@@ -1,8 +1,8 @@
 /**
  * Servicio de Calculadora
  */
-Calculadora.$inject = ['$rootScope'];
-function Calculadora($rootScope){
+Calculadora.$inject = ['$parse'];
+function Calculadora($parse){
     var variables = {};
     var msjError;
 
@@ -16,11 +16,8 @@ function Calculadora($rootScope){
     }
 
     calcular = function(variable){
-        if (processFormula(variable)) {
-            return $rootScope.$eval(variable);
-        }else{
-            return 'Error';
-        }
+        resultado = $parse(variables[variable])(variables);
+        return resultado;
     };
 
     addVar = function(variable, value){
