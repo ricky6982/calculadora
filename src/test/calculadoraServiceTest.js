@@ -17,6 +17,16 @@ describe('Prueba del Servicio de la Calculadora', function() {
         expect(Object.keys(calc.variables).length).toEqual(3);
     });
 
+    it('Prueba de calculo de formulas que esta en dependencia con otras variables', function() {
+        // Ejemplo: 
+        //     variables: {
+        //          'A': '45.54',
+        //          'B': 'A + 2',
+        //          'C': 'B * A'
+        //     }
+        //   Se realizan las pruebas para buscar el resultado de la formula 'B * A'
+    });
+
     it('Editando variables de la calculadora', function() {
         
     });

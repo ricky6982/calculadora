@@ -110,9 +110,9 @@ function makeGraph(obj){
 function getDependencies(formula){
     formula = " " + formula + " ";
     var vectorDependencias = formula
-                      .replace(/[-!$%^&*+|~=`{}\[\]:";'<>?,\/]/g, ' ')
-                      .replace(/\s[0-9]+(\.[0-9]+)?\s/g,' ')
-                      .replace(/\s\s+/g, ' ')
+                      .replace(/[-!$%^&*+|~=`{}()\[\]:";'<>?,\/]/g, '  ')
+                      .replace(/\s[0-9]+(\.[0-9]+)?\s/g,'  ')
+                      .replace(/\s\s+/g, '  ')
                       .split(' ')
                     ;
     vectorDependencias = $.unique(vectorDependencias.filter(Boolean));

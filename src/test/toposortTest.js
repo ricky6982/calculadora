@@ -56,7 +56,15 @@ describe('Prueba de funciones de la libreria Toposort', function() {
     });
 
     // TODO: Implementar las pruebas para la funcion getDependencies();
-    xit('Obtener las dependencias que tiene una formula', function() {
-        
+    it('Obtener las dependencias que tiene una formula', function() {
+        var formula = " 6 * 5";
+        expect(getDependencies(formula).length).toEqual(0);
+
+        formula = " 6 * sueldo_basico";
+        expect(getDependencies(formula).length).toEqual(1);
+
+        formula = " 6 * ( sueldo_basico + 5 )";
+        console.log(getDependencies(formula));
+        expect(getDependencies(formula).length).toEqual(1);
     });
 });
