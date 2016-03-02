@@ -101,6 +101,24 @@ function makeGraph(obj){
   return result;
 }
 
+/**
+ * Obtiene un vector con las dependencias que se encuentran en una formula (string)
+ * 
+ * @param  string formula 
+ * @return array  Array con las dependencias encontradas
+ */
+function getDependencies(formula){
+    formula = " " + formula + " ";
+    var vectorDependencias = formula
+                      .replace(/[-!$%^&*+|~=`{}\[\]:";'<>?,\/]/g, ' ')
+                      .replace(/\s[0-9]+(\.[0-9]+)?\s/g,' ')
+                      .replace(/\s\s+/g, ' ')
+                      .split(' ')
+                    ;
+    vectorDependencias = $.unique(vectorDependencias.filter(Boolean));
+    return vectorDependencias;
+}
+
 //  Función que extrae las dependencias de cada variable declarada
 //    Ejemplo: 
 //      variables = {
@@ -120,17 +138,7 @@ function makeObjectDependency(obj)
 {
   var objDep = {};
   angular.forEach(obj, function(formula, variable){
-    formula = " " + formula + " ";
-     var vectorDependencias = formula
-                      .replace(/[-!$%^&*+|~=`{}\[\]:";'<>?,\/]/g, ' ')
-                      .replace(/\s[0-9]+(\.[0-9]+)?\s/g,' ')
-                      .replace(/\s\s+/g, ' ')
-                      .split(' ')
-                    ;
-
-    vectorDependencias = $.unique(vectorDependencias.filter(Boolean));
-
-    objDep[variable] = vectorDependencias;
+    objDep[variable] = getDependencies(formula);
   });
 
   return objDep;

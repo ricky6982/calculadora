@@ -9,7 +9,8 @@ function calculadoraDirective(){
         scope: {},
         controller: ['$scope', 'Calculadora',
             function ($scope, Calculadora){
-                $scope.formula = "6*5";
+                $scope.formula = " 6 * 5 ";
+                $scope.resultado = "";
                 $scope.modoEdicion = false;
                 $scope.editVar = "";
                 $scope.variables = Calculadora.variables;

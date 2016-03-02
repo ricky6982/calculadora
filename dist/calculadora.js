@@ -16,7 +16,7 @@ angular.module("template/calculadora.tpl.html", []).run(["$templateCache", funct
     "        <div ng-hide=\"modoEdicion\">\n" +
     "          <!-- Modo Edición -->\n" +
     "          <div class=\"form-group\">\n" +
-    "              <input type=\"text\" ng-model=\"formula\" class=\"form-control input-lg\" disabled>\n" +
+    "              <input type=\"text\" ng-model=\"formula\" class=\"form-control input-lg\">\n" +
     "          </div>\n" +
     "          <div class=\"form-inline form-group\">\n" +
     "              <label for=\"\">Nombre de la variable</label>\n" +
@@ -166,6 +166,24 @@ function makeGraph(obj){
   return result;
 }
 
+/**
+ * Obtiene un vector con las dependencias que se encuentran en una formula (string)
+ * 
+ * @param  string formula 
+ * @return array  Array con las dependencias encontradas
+ */
+function getDependencies(formula){
+    formula = " " + formula + " ";
+    var vectorDependencias = formula
+                      .replace(/[-!$%^&*+|~=`{}\[\]:";'<>?,\/]/g, ' ')
+                      .replace(/\s[0-9]+(\.[0-9]+)?\s/g,' ')
+                      .replace(/\s\s+/g, ' ')
+                      .split(' ')
+                    ;
+    vectorDependencias = $.unique(vectorDependencias.filter(Boolean));
+    return vectorDependencias;
+}
+
 //  Función que extrae las dependencias de cada variable declarada
 //    Ejemplo: 
 //      variables = {
@@ -185,17 +203,7 @@ function makeObjectDependency(obj)
 {
   var objDep = {};
   angular.forEach(obj, function(formula, variable){
-    formula = " " + formula + " ";
-     var vectorDependencias = formula
-                      .replace(/[-!$%^&*+|~=`{}\[\]:";'<>?,\/]/g, ' ')
-                      .replace(/\s[0-9]+(\.[0-9]+)?\s/g,' ')
-                      .replace(/\s\s+/g, ' ')
-                      .split(' ')
-                    ;
-
-    vectorDependencias = $.unique(vectorDependencias.filter(Boolean));
-
-    objDep[variable] = vectorDependencias;
+    objDep[variable] = getDependencies(formula);
   });
 
   return objDep;
@@ -208,8 +216,8 @@ angular.module('calculadora', ['calculadora.templates']);
 /**
  * Servicio de Calculadora
  */
-Calculadora.$inject = ['$parse'];
-function Calculadora($parse){
+Calculadora.$inject = ['$parse', '$interpolate'];
+function Calculadora($parse, $interpolate){
     var variables = {};
     var msjError;
 
@@ -222,8 +230,23 @@ function Calculadora($parse){
         return true;
     }
 
-    calcular = function(variable){
-        resultado = $parse(variables[variable])(variables);
+    function resolverDependencia(formula, objDep){
+        var nuevaFormula = angular.copy(formula);
+        dependencias = getDependencies(nuevaFormula);
+        if (dependencias.length > 0) {
+            angular.forEach(dependencias, function(dependencia){
+                var regxp = new RegExp(dependencia, "g");
+                subDependency = " ( " + resolverDependencia(variables[dependencia], objDep) + " ) ";
+                nuevaFormula = nuevaFormula.replace(regxp, subDependency);
+            });
+        }
+        return nuevaFormula;
+    }
+
+    calcular = function(formula){
+        objDep = makeObjectDependency(variables);
+        f = resolverDependencia(formula, objDep);
+        resultado = $interpolate("{{ " + f + " }}")();
         return resultado;
     };
 
@@ -278,7 +301,8 @@ function calculadoraDirective(){
         scope: {},
         controller: ['$scope', 'Calculadora',
             function ($scope, Calculadora){
-                $scope.formula = "6*5";
+                $scope.formula = " 6 * 5 ";
+                $scope.resultado = "";
                 $scope.modoEdicion = false;
                 $scope.editVar = "";
                 $scope.variables = Calculadora.variables;

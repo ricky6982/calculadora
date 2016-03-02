@@ -55,4 +55,8 @@ describe('Prueba de funciones de la libreria Toposort', function() {
         expect(hasCyclicDependency(graph)).toBe(false);
     });
 
+    // TODO: Implementar las pruebas para la funcion getDependencies();
+    xit('Obtener las dependencias que tiene una formula', function() {
+        
+    });
 });

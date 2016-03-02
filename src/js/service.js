@@ -1,8 +1,8 @@
 /**
  * Servicio de Calculadora
  */
-Calculadora.$inject = ['$parse'];
-function Calculadora($parse){
+Calculadora.$inject = ['$parse', '$interpolate'];
+function Calculadora($parse, $interpolate){
     var variables = {};
     var msjError;
 
@@ -15,8 +15,23 @@ function Calculadora($parse){
         return true;
     }
 
-    calcular = function(variable){
-        resultado = $parse(variables[variable])(variables);
+    function resolverDependencia(formula, objDep){
+        var nuevaFormula = angular.copy(formula);
+        dependencias = getDependencies(nuevaFormula);
+        if (dependencias.length > 0) {
+            angular.forEach(dependencias, function(dependencia){
+                var regxp = new RegExp(dependencia, "g");
+                subDependency = " ( " + resolverDependencia(variables[dependencia], objDep) + " ) ";
+                nuevaFormula = nuevaFormula.replace(regxp, subDependency);
+            });
+        }
+        return nuevaFormula;
+    }
+
+    calcular = function(formula){
+        objDep = makeObjectDependency(variables);
+        f = resolverDependencia(formula, objDep);
+        resultado = $interpolate("{{ " + f + " }}")();
         return resultado;
     };
 

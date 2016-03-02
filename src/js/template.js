@@ -8,7 +8,7 @@ angular.module("template/calculadora.tpl.html", []).run(["$templateCache", funct
     "        <div ng-hide=\"modoEdicion\">\n" +
     "          <!-- Modo Edición -->\n" +
     "          <div class=\"form-group\">\n" +
-    "              <input type=\"text\" ng-model=\"formula\" class=\"form-control input-lg\" disabled>\n" +
+    "              <input type=\"text\" ng-model=\"formula\" class=\"form-control input-lg\">\n" +
     "          </div>\n" +
     "          <div class=\"form-inline form-group\">\n" +
     "              <label for=\"\">Nombre de la variable</label>\n" +
