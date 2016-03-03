@@ -28,8 +28,10 @@ describe('Prueba del Servicio de la Calculadora', function() {
         calc.addVar("A", "45.54");
         calc.addVar("B", "A+2");
         calc.addVar("C", "B*A");
-        resultado = calc.calcular(calc.variables["C"]);
+        resultado = calc.calcular(calc.variables.C);
         expect(parseFloat(resultado)).toEqual((45.54+2)*(45.54));
+        resultado = calc.calcular('A+B+C');
+        expect(parseFloat(resultado)).toEqual(45.54+(45.54+2)+((45.54+2)*45.54));
     });
 
     it('Editando variables de la calculadora', function() {

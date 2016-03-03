@@ -3,7 +3,6 @@ angular.module('calculadora.templates', ['template/calculadora.tpl.html']);
 angular.module("template/calculadora.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("template/calculadora.tpl.html",
     "<div class=\"row well\">\n" +
-    "    <h1>Calculadora</h1>\n" +
     "    <div class=\"col-sm-6\">\n" +
     "        <div ng-hide=\"modoEdicion\">\n" +
     "          <!-- Modo Edición -->\n" +
@@ -50,6 +49,16 @@ angular.module("template/calculadora.tpl.html", []).run(["$templateCache", funct
     "                    <button ng-click=\"eliminar(key)\"><i class=\"glyphicon glyphicon-trash\"></i></button>\n" +
     "                </div>\n" +
     "            </div>\n" +
+    "        </div>\n" +
+    "\n" +
+    "        <div ng-show=\"msj.success\" class=\"alert alert-success alert-dismissible\" role=\"alert\">\n" +
+    "          <button type=\"button\" class=\"close\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>\n" +
+    "          <strong>Warning!</strong> Better check yourself, you're not looking too good.\n" +
+    "        </div>\n" +
+    "\n" +
+    "        <div ng-show=\"msj.danger\" class=\"alert alert-danger alert-dismissible\" role=\"alert\">\n" +
+    "          <button type=\"button\" class=\"close\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>\n" +
+    "          <strong>Warning!</strong> Better check yourself, you're not looking too good.\n" +
     "        </div>\n" +
     "    </div>\n" +
     "</div>");

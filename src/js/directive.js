@@ -1,5 +1,13 @@
 /**
  * Directiva que muestra la calculadora
+ * ====================================
+ *
+ * Fn Calcular: resuelve la formula establecida en la variable $scope.formula
+ *              teniendo en cuenta las dependencias definidas en el servicio Calculadora.
+ *
+ * Fn Guardar:  Guarda una formula en el servicio Calculadora siempre que no presente un conflicto
+ *              como ser una referencia ciclica. 
+ * 
  */
 function calculadoraDirective(){
     return {
@@ -14,6 +22,10 @@ function calculadoraDirective(){
                 $scope.modoEdicion = false;
                 $scope.editVar = "";
                 $scope.variables = Calculadora.variables;
+                $scope.msj = {
+                    danger: true,
+                    success: true,
+                };
 
                 $scope.calcular = function(){
                     $scope.resultado = Calculadora.calcular($scope.formula);
