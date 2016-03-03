@@ -55,8 +55,10 @@ describe('Prueba de funciones de la libreria Toposort', function() {
         expect(hasCyclicDependency(graph)).toBe(false);
     });
 
-    // TODO: Implementar las pruebas para la funcion getDependencies();
     it('Obtener las dependencias que tiene una formula', function() {
+        // Las dependencias son todas las palabras que pueden o no estar definidas
+        // el algoritmo solo identifica si tiene alguna variable de la cual depende
+        // sin importar si esta o no definida.
         var formula = " 6 * 5";
         expect(getDependencies(formula).length).toEqual(0);
 
@@ -64,7 +66,12 @@ describe('Prueba de funciones de la libreria Toposort', function() {
         expect(getDependencies(formula).length).toEqual(1);
 
         formula = " 6 * ( sueldo_basico + 5 )";
-        console.log(getDependencies(formula));
         expect(getDependencies(formula).length).toEqual(1);
+
+        formula = "6+4*7+5";
+        expect(getDependencies(formula).length).toEqual(0);
+
+        formula = "6+4*7+5*(sueldo_basico)+antiguedad*algo";
+        expect(getDependencies(formula).length).toEqual(3);
     });
 });
