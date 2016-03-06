@@ -28,6 +28,21 @@ function Calculadora($parse, $interpolate){
         return nuevaFormula;
     }
 
+    function existVar(variable){
+        return typeof variables[variable] !== "undefined";
+    }
+
+    function itDependsOn(variable){
+        objDep = makeObjectDependency(variables);
+        depends = false;
+        angular.forEach(objDep, function(dependencias, item){
+            if (dependencias.indexOf(variable) != -1) {
+                depends = true;
+            }
+        });
+        return depends;
+    }
+
     calcular = function(formula){
         try{
             objDep = makeObjectDependency(variables);
@@ -37,10 +52,6 @@ function Calculadora($parse, $interpolate){
             return false;
         }
         return resultado;
-    };
-
-    existVar = function(variable){
-        return typeof variables[variable] !== "undefined";
     };
 
     addVar = function(variable, value){
@@ -69,8 +80,14 @@ function Calculadora($parse, $interpolate){
 
     };
 
-    deleteVar = function(variable, value){
-
+    deleteVar = function(variable){
+        if (existVar(variable)) {
+            if (!itDependsOn(variable)) {
+                delete variables[variable];
+            }else{
+                console.log('no se puede eliminar' + variable);
+            }
+        }
     };
 
     return {

@@ -82,8 +82,8 @@ function calculadoraDirective(){
                     $scope.editVar = variable;
                 };
 
-                $scope.eliminar = function(){
-
+                $scope.eliminar = function(variable){
+                    Calculadora.deleteVar(variable);
                 };
 
                 $scope.modoNormal = function(){
