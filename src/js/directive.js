@@ -17,22 +17,43 @@ function calculadoraDirective(){
         scope: {},
         controller: ['$scope', 'Calculadora',
             function ($scope, Calculadora){
-                $scope.formula = " 6 * 5 ";
+                $scope.formula = "";
                 $scope.resultado = "";
                 $scope.modoEdicion = false;
                 $scope.editVar = "";
                 $scope.variables = Calculadora.variables;
-                $scope.msj = {
-                    danger: true,
-                    success: true,
-                };
+                $scope.alert = {
+                            danger: [],
+                            success: []
+                        };
+
+                function alertClear(){
+                    $scope.alert = {
+                            danger: [],
+                            success: []
+                        };
+                }
 
                 $scope.calcular = function(){
                     $scope.resultado = Calculadora.calcular($scope.formula);
                 };
 
                 $scope.guardar = function(){
-                    Calculadora.addVar($scope.nombreVariable, $scope.formula);
+                    alertClear();
+                    if (Calculadora.existVar($scope.nombreVariable)) {
+                        $scope.alert.danger.push('El nombre de la variable ya fue definido.');
+                        return false;
+                    }
+                    if ($scope.formula.trim() === "") {
+                        $scope.alert.danger.push('La formula esta vacia.');
+                        return false;
+                    }
+                    if (Calculadora.addVar($scope.nombreVariable, $scope.formula)) {
+                        $scope.alert.success.push("La variable se guardo correctamente.");
+                    }else{
+                        $scope.alert.danger.push("La variable no se guardo.");
+                    }
+                    
                 };
 
                 $scope.editar = function(variable){
@@ -49,6 +70,10 @@ function calculadoraDirective(){
                     $scope.modoEdicion = false;
                     $scope.editVar = "";
                     $scope.formula = "";
+                };
+
+                $scope.clearAlert = function(){
+                    alertClear();
                 };
             }
         ]

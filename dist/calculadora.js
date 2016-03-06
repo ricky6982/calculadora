@@ -59,14 +59,20 @@ angular.module("template/calculadora.tpl.html", []).run(["$templateCache", funct
     "            </div>\n" +
     "        </div>\n" +
     "\n" +
-    "        <div ng-show=\"msj.success\" class=\"alert alert-success alert-dismissible\" role=\"alert\">\n" +
-    "          <button type=\"button\" class=\"close\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>\n" +
-    "          <strong>Warning!</strong> Better check yourself, you're not looking too good.\n" +
+    "        <div ng-show=\"alert.success.length > 0\" class=\"alert alert-success alert-dismissible\" role=\"alert\">\n" +
+    "          <button ng-click=\"clearAlert()\" type=\"button\" class=\"close\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>\n" +
+    "          <strong>Todo bien!</strong>\n" +
+    "          <ul>\n" +
+    "            <li ng-repeat=\"msj in alert.success\">{{ msj }}</li>\n" +
+    "          </ul>\n" +
     "        </div>\n" +
     "\n" +
-    "        <div ng-show=\"msj.danger\" class=\"alert alert-danger alert-dismissible\" role=\"alert\">\n" +
-    "          <button type=\"button\" class=\"close\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>\n" +
-    "          <strong>Warning!</strong> Better check yourself, you're not looking too good.\n" +
+    "        <div ng-show=\"alert.danger.length > 0\" class=\"alert alert-danger alert-dismissible\" role=\"alert\">\n" +
+    "          <button ng-click=\"clearAlert()\" type=\"button\" class=\"close\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>\n" +
+    "          <strong>Algo salio mal</strong>\n" +
+    "          <ul>\n" +
+    "            <li ng-repeat=\"msj in alert.danger\">{{ msj }}</li>\n" +
+    "          </ul>\n" +
     "        </div>\n" +
     "    </div>\n" +
     "</div>");
@@ -259,12 +265,16 @@ function Calculadora($parse, $interpolate){
         return resultado;
     };
 
+    existVar = function(variable){
+        return typeof variables[variable] !== "undefined";
+    };
+
     addVar = function(variable, value){
         msjError = "";
         if (typeof value === "undefined") {
             value = "";
         }
-        if (typeof variables[variable] !== "undefined") {
+        if (existVar(variable)) {
             msjError = "La variable ya esta definida";
             return false;
         }
@@ -291,6 +301,7 @@ function Calculadora($parse, $interpolate){
 
     return {
         variables: variables,
+        existVar: existVar,
         addVar: addVar,
         editVar: editVar,
         deleteVar: deleteVar,
@@ -318,22 +329,43 @@ function calculadoraDirective(){
         scope: {},
         controller: ['$scope', 'Calculadora',
             function ($scope, Calculadora){
-                $scope.formula = " 6 * 5 ";
+                $scope.formula = "";
                 $scope.resultado = "";
                 $scope.modoEdicion = false;
                 $scope.editVar = "";
                 $scope.variables = Calculadora.variables;
-                $scope.msj = {
-                    danger: true,
-                    success: true,
-                };
+                $scope.alert = {
+                            danger: [],
+                            success: []
+                        };
+
+                function alertClear(){
+                    $scope.alert = {
+                            danger: [],
+                            success: []
+                        };
+                }
 
                 $scope.calcular = function(){
                     $scope.resultado = Calculadora.calcular($scope.formula);
                 };
 
                 $scope.guardar = function(){
-                    Calculadora.addVar($scope.nombreVariable, $scope.formula);
+                    alertClear();
+                    if (Calculadora.existVar($scope.nombreVariable)) {
+                        $scope.alert.danger.push('El nombre de la variable ya fue definido.');
+                        return false;
+                    }
+                    if ($scope.formula.trim() === "") {
+                        $scope.alert.danger.push('La formula esta vacia.');
+                        return false;
+                    }
+                    if (Calculadora.addVar($scope.nombreVariable, $scope.formula)) {
+                        $scope.alert.success.push("La variable se guardo correctamente.");
+                    }else{
+                        $scope.alert.danger.push("La variable no se guardo.");
+                    }
+                    
                 };
 
                 $scope.editar = function(variable){
@@ -350,6 +382,10 @@ function calculadoraDirective(){
                     $scope.modoEdicion = false;
                     $scope.editVar = "";
                     $scope.formula = "";
+                };
+
+                $scope.clearAlert = function(){
+                    alertClear();
                 };
             }
         ]

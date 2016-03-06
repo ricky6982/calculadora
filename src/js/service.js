@@ -35,12 +35,16 @@ function Calculadora($parse, $interpolate){
         return resultado;
     };
 
+    existVar = function(variable){
+        return typeof variables[variable] !== "undefined";
+    };
+
     addVar = function(variable, value){
         msjError = "";
         if (typeof value === "undefined") {
             value = "";
         }
-        if (typeof variables[variable] !== "undefined") {
+        if (existVar(variable)) {
             msjError = "La variable ya esta definida";
             return false;
         }
@@ -67,6 +71,7 @@ function Calculadora($parse, $interpolate){
 
     return {
         variables: variables,
+        existVar: existVar,
         addVar: addVar,
         editVar: editVar,
         deleteVar: deleteVar,

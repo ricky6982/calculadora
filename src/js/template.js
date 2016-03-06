@@ -51,14 +51,20 @@ angular.module("template/calculadora.tpl.html", []).run(["$templateCache", funct
     "            </div>\n" +
     "        </div>\n" +
     "\n" +
-    "        <div ng-show=\"msj.success\" class=\"alert alert-success alert-dismissible\" role=\"alert\">\n" +
-    "          <button type=\"button\" class=\"close\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>\n" +
-    "          <strong>Warning!</strong> Better check yourself, you're not looking too good.\n" +
+    "        <div ng-show=\"alert.success.length > 0\" class=\"alert alert-success alert-dismissible\" role=\"alert\">\n" +
+    "          <button ng-click=\"clearAlert()\" type=\"button\" class=\"close\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>\n" +
+    "          <strong>Todo bien!</strong>\n" +
+    "          <ul>\n" +
+    "            <li ng-repeat=\"msj in alert.success\">{{ msj }}</li>\n" +
+    "          </ul>\n" +
     "        </div>\n" +
     "\n" +
-    "        <div ng-show=\"msj.danger\" class=\"alert alert-danger alert-dismissible\" role=\"alert\">\n" +
-    "          <button type=\"button\" class=\"close\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>\n" +
-    "          <strong>Warning!</strong> Better check yourself, you're not looking too good.\n" +
+    "        <div ng-show=\"alert.danger.length > 0\" class=\"alert alert-danger alert-dismissible\" role=\"alert\">\n" +
+    "          <button ng-click=\"clearAlert()\" type=\"button\" class=\"close\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>\n" +
+    "          <strong>Algo salio mal</strong>\n" +
+    "          <ul>\n" +
+    "            <li ng-repeat=\"msj in alert.danger\">{{ msj }}</li>\n" +
+    "          </ul>\n" +
     "        </div>\n" +
     "    </div>\n" +
     "</div>");
