@@ -37,7 +37,7 @@
                 <button>0</button><button>+</button><button ng-click="calcular()">=</button>
             </div>
             <!-- Teclas de Variables -->
-            <div class="col-sm-6">
+            <div class="col-sm-6" ng-hide="modoEdicion">
                 <legend>Variables</legend>
                 <div ng-repeat="(key, value) in variables">
                     <button>{{ key }}</button>

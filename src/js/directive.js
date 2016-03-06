@@ -27,6 +27,8 @@ function calculadoraDirective(){
                             success: []
                         };
 
+                var formulaAux = "";
+
                 function alertClear(){
                     $scope.alert = {
                             danger: [],
@@ -57,9 +59,12 @@ function calculadoraDirective(){
                 };
 
                 $scope.editar = function(variable){
+                    if (!$scope.modoEdicion) {
+                        formulaAux = $scope.formula;
+                        $scope.formula = $scope.variables[variable];
+                    }
                     $scope.modoEdicion = true;
                     $scope.editVar = variable;
-                    $scope.formula = $scope.variables[variable];
                 };
 
                 $scope.eliminar = function(){
@@ -69,7 +74,7 @@ function calculadoraDirective(){
                 $scope.modoNormal = function(){
                     $scope.modoEdicion = false;
                     $scope.editVar = "";
-                    $scope.formula = "";
+                    $scope.formula = formulaAux;
                 };
 
                 $scope.clearAlert = function(){
