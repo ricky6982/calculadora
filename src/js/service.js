@@ -29,9 +29,13 @@ function Calculadora($parse, $interpolate){
     }
 
     calcular = function(formula){
-        objDep = makeObjectDependency(variables);
-        f = resolverDependencia(formula, objDep);
-        resultado = $interpolate("{{ " + f + " }}")();
+        try{
+            objDep = makeObjectDependency(variables);
+            f = resolverDependencia(formula, objDep);
+            resultado = $interpolate("{{ " + f + " }}")();
+        }catch(e){
+            return false;
+        }
         return resultado;
     };
 

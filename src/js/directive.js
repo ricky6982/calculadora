@@ -21,6 +21,7 @@ function calculadoraDirective(){
                 $scope.resultado = "";
                 $scope.modoEdicion = false;
                 $scope.editVar = "";
+                $scope.nombreVariable = "";
                 $scope.variables = Calculadora.variables;
                 $scope.alert = {
                             danger: [],
@@ -37,7 +38,14 @@ function calculadoraDirective(){
                 }
 
                 $scope.calcular = function(){
-                    $scope.resultado = Calculadora.calcular($scope.formula);
+                    if (Calculadora.calcular($scope.formula)) {
+                        $scope.resultado = Calculadora.calcular($scope.formula);
+                        return true;
+                    }else{
+                        $scope.alert.danger.push('Hay un error en la formula');
+                        return false;
+                    }
+                    
                 };
 
                 $scope.guardar = function(){
@@ -48,6 +56,13 @@ function calculadoraDirective(){
                     }
                     if ($scope.formula.trim() === "") {
                         $scope.alert.danger.push('La formula esta vacia.');
+                        return false;
+                    }
+                    if ($scope.nombreVariable.trim() === "") {
+                        $scope.alert.danger.push('Debe establecer un nombre para la variable.');
+                        return false;
+                    }
+                    if (!$scope.calcular()) {
                         return false;
                     }
                     if (Calculadora.addVar($scope.nombreVariable, $scope.formula)) {
