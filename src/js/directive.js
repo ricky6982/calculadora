@@ -24,16 +24,20 @@ function calculadoraDirective(){
                 $scope.nombreVariable = "";
                 $scope.variables = Calculadora.variables;
                 $scope.alert = {
+                            info: [],
                             danger: [],
-                            success: []
+                            success: [],
+                            warning: []
                         };
 
                 var formulaAux = "";
 
                 function alertClear(){
                     $scope.alert = {
+                            info: [],
                             danger: [],
-                            success: []
+                            success: [],
+                            warning: []
                         };
                 }
 
@@ -69,8 +73,8 @@ function calculadoraDirective(){
                         $scope.alert.success.push("La variable se guardo correctamente.");
                     }else{
                         $scope.alert.danger.push("La variable no se guardo.");
+                        $scope.alert.danger = $scope.alert.danger.concat(Calculadora.notificaciones.danger).concat(Calculadora.notificaciones.warning);
                     }
-                    
                 };
 
                 $scope.editar = function(variable){
@@ -83,7 +87,10 @@ function calculadoraDirective(){
                 };
 
                 $scope.eliminar = function(variable){
+                    alertClear();
                     Calculadora.deleteVar(variable);
+                    $scope.alert.warning = $scope.alert.warning.concat(Calculadora.notificaciones.warning);
+                    $scope.alert.danger = $scope.alert.danger.concat(Calculadora.notificaciones.danger);
                 };
 
                 $scope.modoNormal = function(){

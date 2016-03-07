@@ -50,7 +50,7 @@ angular.module("template/calculadora.tpl.html", []).run(["$templateCache", funct
     "                </div>\n" +
     "            </div>\n" +
     "        </div>\n" +
-    "\n" +
+    "        <!-- Alert Success -->\n" +
     "        <div ng-show=\"alert.success.length > 0\" class=\"alert alert-success alert-dismissible\" role=\"alert\">\n" +
     "          <button ng-click=\"clearAlert()\" type=\"button\" class=\"close\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>\n" +
     "          <strong>Todo bien!</strong>\n" +
@@ -59,11 +59,30 @@ angular.module("template/calculadora.tpl.html", []).run(["$templateCache", funct
     "          </ul>\n" +
     "        </div>\n" +
     "\n" +
+    "        <!-- Alert Danger -->\n" +
     "        <div ng-show=\"alert.danger.length > 0\" class=\"alert alert-danger alert-dismissible\" role=\"alert\">\n" +
     "          <button ng-click=\"clearAlert()\" type=\"button\" class=\"close\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>\n" +
     "          <strong>Algo salio mal</strong>\n" +
     "          <ul>\n" +
     "            <li ng-repeat=\"msj in alert.danger\">{{ msj }}</li>\n" +
+    "          </ul>\n" +
+    "        </div>\n" +
+    "\n" +
+    "        <!-- Alert Info -->\n" +
+    "        <div ng-show=\"alert.info.length > 0\" class=\"alert alert-info alert-dismissible\" role=\"alert\">\n" +
+    "          <button ng-click=\"clearAlert()\" type=\"button\" class=\"close\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>\n" +
+    "          <strong>Información</strong>\n" +
+    "          <ul>\n" +
+    "            <li ng-repeat=\"msj in alert.info\">{{ msj }}</li>\n" +
+    "          </ul>\n" +
+    "        </div>\n" +
+    "\n" +
+    "        <!-- Alert Info -->\n" +
+    "        <div ng-show=\"alert.warning.length > 0\" class=\"alert alert-warning alert-dismissible\" role=\"alert\">\n" +
+    "          <button ng-click=\"clearAlert()\" type=\"button\" class=\"close\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>\n" +
+    "          <strong>Precaución</strong>\n" +
+    "          <ul>\n" +
+    "            <li ng-repeat=\"msj in alert.warning\">{{ msj }}</li>\n" +
     "          </ul>\n" +
     "        </div>\n" +
     "    </div>\n" +

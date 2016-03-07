@@ -4,7 +4,19 @@
 Calculadora.$inject = ['$parse', '$interpolate'];
 function Calculadora($parse, $interpolate){
     var variables = {};
-    var msjError;
+    var notificaciones = {
+        success: [],
+        danger: [],
+        warning: [],
+        info: []
+    };
+
+    function clearNotificaciones(){
+        notificaciones.success = [];
+        notificaciones.warning = [];
+        notificaciones.danger = [];
+        notificaciones.info = [];
+    }
 
     function areCorrectVariables(obj){
         objDep = makeObjectDependency(obj);
@@ -55,12 +67,12 @@ function Calculadora($parse, $interpolate){
     };
 
     addVar = function(variable, value){
-        msjError = "";
+        clearNotificaciones();
         if (typeof value === "undefined") {
             value = "";
         }
         if (existVar(variable)) {
-            msjError = "La variable ya esta definida";
+            notificaciones.warning.push("La variable ya esta definida");
             return false;
         }
 
@@ -71,8 +83,8 @@ function Calculadora($parse, $interpolate){
             return true;
         }
 
-        msjError = cyclicDependencyIn;
-        console.log(msjError);
+        notificaciones.danger.push(cyclicDependencyIn);
+
         return false;
     };
 
@@ -81,11 +93,12 @@ function Calculadora($parse, $interpolate){
     };
 
     deleteVar = function(variable){
+        clearNotificaciones();
         if (existVar(variable)) {
             if (!itDependsOn(variable)) {
                 delete variables[variable];
             }else{
-                console.log('no se puede eliminar' + variable);
+                notificaciones.warning.push('La variable ' + variable + ' no puede ser eliminada porque existen otras variables que la necesitan para realizar sus calculos.');
             }
         }
     };
@@ -97,6 +110,7 @@ function Calculadora($parse, $interpolate){
         editVar: editVar,
         deleteVar: deleteVar,
         calcular: calcular,
+        notificaciones: notificaciones
     };
 }
 

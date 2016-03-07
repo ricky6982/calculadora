@@ -46,7 +46,7 @@
                 </div>
             </div>
         </div>
-
+        <!-- Alert Success -->
         <div ng-show="alert.success.length > 0" class="alert alert-success alert-dismissible" role="alert">
           <button ng-click="clearAlert()" type="button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
           <strong>Todo bien!</strong>
@@ -55,11 +55,30 @@
           </ul>
         </div>
 
+        <!-- Alert Danger -->
         <div ng-show="alert.danger.length > 0" class="alert alert-danger alert-dismissible" role="alert">
           <button ng-click="clearAlert()" type="button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
           <strong>Algo salio mal</strong>
           <ul>
             <li ng-repeat="msj in alert.danger">{{ msj }}</li>
+          </ul>
+        </div>
+
+        <!-- Alert Info -->
+        <div ng-show="alert.info.length > 0" class="alert alert-info alert-dismissible" role="alert">
+          <button ng-click="clearAlert()" type="button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <strong>Información</strong>
+          <ul>
+            <li ng-repeat="msj in alert.info">{{ msj }}</li>
+          </ul>
+        </div>
+
+        <!-- Alert Info -->
+        <div ng-show="alert.warning.length > 0" class="alert alert-warning alert-dismissible" role="alert">
+          <button ng-click="clearAlert()" type="button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <strong>Precaución</strong>
+          <ul>
+            <li ng-repeat="msj in alert.warning">{{ msj }}</li>
           </ul>
         </div>
     </div>
