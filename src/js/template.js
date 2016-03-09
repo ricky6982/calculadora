@@ -4,10 +4,10 @@ angular.module("template/calculadora.tpl.html", []).run(["$templateCache", funct
   $templateCache.put("template/calculadora.tpl.html",
     "<div class=\"row well\">\n" +
     "    <div class=\"col-sm-6\">\n" +
+    "        <!-- Modo Normal -->\n" +
     "        <div ng-hide=\"modoEdicion\">\n" +
-    "          <!-- Modo Edición -->\n" +
     "          <div class=\"form-group\">\n" +
-    "              <input type=\"text\" ng-model=\"formula\" class=\"form-control input-lg\">\n" +
+    "              <input type=\"text\" ng-model=\"formula\" class=\"form-control input-lg\" spellcheck=\"false\">\n" +
     "          </div>\n" +
     "          <div class=\"form-inline form-group\">\n" +
     "              <label for=\"\">Nombre de la variable</label>\n" +
@@ -15,14 +15,15 @@ angular.module("template/calculadora.tpl.html", []).run(["$templateCache", funct
     "              <button ng-click=\"guardar()\">Guardar</button>\n" +
     "          </div>\n" +
     "        </div>\n" +
+    "\n" +
+    "        <!-- Modo Edición -->\n" +
     "        <div ng-show=\"modoEdicion\">\n" +
-    "          <!-- Modo Normal -->\n" +
     "          <div class=\"form-inline form-group\">\n" +
     "              <label for=\"\">{{ editVar }}</label>\n" +
-    "              <input type=\"text\" ng-model=\"formula\" class=\"form-control input-lg\" disabled>\n" +
+    "              <input type=\"text\" ng-model=\"formula\" class=\"form-control input-lg\" spellcheck=\"false\">\n" +
     "          </div>\n" +
     "          <div class=\"form-group\">\n" +
-    "              <button>Guardar cambios</button>\n" +
+    "              <button ng-click=\"update()\">Guardar cambios</button>\n" +
     "              <button ng-click=\"modoNormal()\">Modo Normal</button>\n" +
     "          </div>\n" +
     "        </div>\n" +
@@ -44,12 +45,13 @@ angular.module("template/calculadora.tpl.html", []).run(["$templateCache", funct
     "            <div class=\"col-sm-6\" ng-hide=\"modoEdicion\">\n" +
     "                <legend>Variables</legend>\n" +
     "                <div ng-repeat=\"(key, value) in variables\">\n" +
-    "                    <button>{{ key }}</button>\n" +
+    "                    <button ng-click=\"insertarAFormula(key)\">{{ key }}</button>\n" +
     "                    <button ng-click=\"editar(key)\"><i class=\"glyphicon glyphicon-pencil\"></i></button>\n" +
     "                    <button ng-click=\"eliminar(key)\"><i class=\"glyphicon glyphicon-trash\"></i></button>\n" +
     "                </div>\n" +
     "            </div>\n" +
     "        </div>\n" +
+    "\n" +
     "        <!-- Alert Success -->\n" +
     "        <div ng-show=\"alert.success.length > 0\" class=\"alert alert-success alert-dismissible\" role=\"alert\">\n" +
     "          <button ng-click=\"clearAlert()\" type=\"button\" class=\"close\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>\n" +

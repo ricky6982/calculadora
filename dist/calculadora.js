@@ -12,10 +12,10 @@ angular.module("template/calculadora.tpl.html", []).run(["$templateCache", funct
   $templateCache.put("template/calculadora.tpl.html",
     "<div class=\"row well\">\n" +
     "    <div class=\"col-sm-6\">\n" +
+    "        <!-- Modo Normal -->\n" +
     "        <div ng-hide=\"modoEdicion\">\n" +
-    "          <!-- Modo Edición -->\n" +
     "          <div class=\"form-group\">\n" +
-    "              <input type=\"text\" ng-model=\"formula\" class=\"form-control input-lg\">\n" +
+    "              <input type=\"text\" ng-model=\"formula\" class=\"form-control input-lg\" spellcheck=\"false\">\n" +
     "          </div>\n" +
     "          <div class=\"form-inline form-group\">\n" +
     "              <label for=\"\">Nombre de la variable</label>\n" +
@@ -23,14 +23,15 @@ angular.module("template/calculadora.tpl.html", []).run(["$templateCache", funct
     "              <button ng-click=\"guardar()\">Guardar</button>\n" +
     "          </div>\n" +
     "        </div>\n" +
+    "\n" +
+    "        <!-- Modo Edición -->\n" +
     "        <div ng-show=\"modoEdicion\">\n" +
-    "          <!-- Modo Normal -->\n" +
     "          <div class=\"form-inline form-group\">\n" +
     "              <label for=\"\">{{ editVar }}</label>\n" +
-    "              <input type=\"text\" ng-model=\"formula\" class=\"form-control input-lg\" disabled>\n" +
+    "              <input type=\"text\" ng-model=\"formula\" class=\"form-control input-lg\" spellcheck=\"false\">\n" +
     "          </div>\n" +
     "          <div class=\"form-group\">\n" +
-    "              <button>Guardar cambios</button>\n" +
+    "              <button ng-click=\"update()\">Guardar cambios</button>\n" +
     "              <button ng-click=\"modoNormal()\">Modo Normal</button>\n" +
     "          </div>\n" +
     "        </div>\n" +
@@ -52,12 +53,13 @@ angular.module("template/calculadora.tpl.html", []).run(["$templateCache", funct
     "            <div class=\"col-sm-6\" ng-hide=\"modoEdicion\">\n" +
     "                <legend>Variables</legend>\n" +
     "                <div ng-repeat=\"(key, value) in variables\">\n" +
-    "                    <button>{{ key }}</button>\n" +
+    "                    <button ng-click=\"insertarAFormula(key)\">{{ key }}</button>\n" +
     "                    <button ng-click=\"editar(key)\"><i class=\"glyphicon glyphicon-pencil\"></i></button>\n" +
     "                    <button ng-click=\"eliminar(key)\"><i class=\"glyphicon glyphicon-trash\"></i></button>\n" +
     "                </div>\n" +
     "            </div>\n" +
     "        </div>\n" +
+    "\n" +
     "        <!-- Alert Success -->\n" +
     "        <div ng-show=\"alert.success.length > 0\" class=\"alert alert-success alert-dismissible\" role=\"alert\">\n" +
     "          <button ng-click=\"clearAlert()\" type=\"button\" class=\"close\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>\n" +
@@ -325,7 +327,7 @@ function Calculadora($parse, $interpolate){
             return false;
         }
 
-        aux = angular.copy(variables);
+        var aux = angular.copy(variables);
         aux[variable] = value;
         if (areCorrectVariables(aux)) {
             variables[variable] = value;
@@ -333,12 +335,25 @@ function Calculadora($parse, $interpolate){
         }
 
         notificaciones.danger.push(cyclicDependencyIn);
-
         return false;
     };
 
     editVar = function(variable, value){
+        clearNotificaciones();
+        if (value.trim === "") {
+            notificaciones.danger.push('La formula no esta definida correctamente.');
+            return false;
+        }
 
+        var aux = angular.copy(variables);
+        aux[variable] = value;
+        if (areCorrectVariables(aux)) {
+            variables[variable] = value;
+            notificaciones.info.push('Se actualizo la formula de la variable '+variable);
+            return true;
+        }
+        notificaciones.danger.push(cyclicDependencyIn);
+        return false;
     };
 
     deleteVar = function(variable){
@@ -408,11 +423,16 @@ function calculadoraDirective(){
                 }
 
                 $scope.calcular = function(){
+                    if ($scope.formula.trim() === "") {
+                        $scope.resultado = "";
+                        return true;
+                    }
                     if (Calculadora.calcular($scope.formula)) {
                         $scope.resultado = Calculadora.calcular($scope.formula);
                         return true;
                     }else{
-                        $scope.alert.danger.push('Hay un error en la formula');
+                        $scope.alert.warning.push('La formula no esta bien definida.');
+                        $scope.resultado = "";
                         return false;
                     }
                     
@@ -426,10 +446,11 @@ function calculadoraDirective(){
                     }
                     if ($scope.formula.trim() === "") {
                         $scope.alert.danger.push('La formula esta vacia.');
+                        $scope.resultado = "";
                         return false;
                     }
                     if ($scope.nombreVariable.trim() === "") {
-                        $scope.alert.danger.push('Debe establecer un nombre para la variable.');
+                        $scope.alert.warning.push('Debe establecer un nombre para la variable.');
                         return false;
                     }
                     if (!$scope.calcular()) {
@@ -443,6 +464,19 @@ function calculadoraDirective(){
                     }
                 };
 
+                $scope.insertarAFormula = function(variable){
+                    $scope.formula = $scope.formula + variable;
+                };
+
+                $scope.update = function(){
+                    alertClear();
+                    Calculadora.editVar($scope.editVar, $scope.formula);
+                    $scope.alert.warning = Calculadora.notificaciones.warning;
+                    $scope.alert.danger = Calculadora.notificaciones.danger;
+                    $scope.alert.info = Calculadora.notificaciones.info;
+                    $scope.modoNormal();
+                };
+
                 $scope.editar = function(variable){
                     if (!$scope.modoEdicion) {
                         formulaAux = $scope.formula;
@@ -450,6 +484,7 @@ function calculadoraDirective(){
                     }
                     $scope.modoEdicion = true;
                     $scope.editVar = variable;
+                    $scope.calcular();
                 };
 
                 $scope.eliminar = function(variable){
@@ -463,6 +498,7 @@ function calculadoraDirective(){
                     $scope.modoEdicion = false;
                     $scope.editVar = "";
                     $scope.formula = formulaAux;
+                    $scope.calcular();
                 };
 
                 $scope.clearAlert = function(){

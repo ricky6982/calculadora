@@ -76,7 +76,7 @@ function Calculadora($parse, $interpolate){
             return false;
         }
 
-        aux = angular.copy(variables);
+        var aux = angular.copy(variables);
         aux[variable] = value;
         if (areCorrectVariables(aux)) {
             variables[variable] = value;
@@ -84,12 +84,25 @@ function Calculadora($parse, $interpolate){
         }
 
         notificaciones.danger.push(cyclicDependencyIn);
-
         return false;
     };
 
     editVar = function(variable, value){
+        clearNotificaciones();
+        if (value.trim === "") {
+            notificaciones.danger.push('La formula no esta definida correctamente.');
+            return false;
+        }
 
+        var aux = angular.copy(variables);
+        aux[variable] = value;
+        if (areCorrectVariables(aux)) {
+            variables[variable] = value;
+            notificaciones.info.push('Se actualizo la formula de la variable '+variable);
+            return true;
+        }
+        notificaciones.danger.push(cyclicDependencyIn);
+        return false;
     };
 
     deleteVar = function(variable){

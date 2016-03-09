@@ -42,11 +42,16 @@ function calculadoraDirective(){
                 }
 
                 $scope.calcular = function(){
+                    if ($scope.formula.trim() === "") {
+                        $scope.resultado = "";
+                        return true;
+                    }
                     if (Calculadora.calcular($scope.formula)) {
                         $scope.resultado = Calculadora.calcular($scope.formula);
                         return true;
                     }else{
-                        $scope.alert.danger.push('Hay un error en la formula');
+                        $scope.alert.warning.push('La formula no esta bien definida.');
+                        $scope.resultado = "";
                         return false;
                     }
                     
@@ -60,10 +65,11 @@ function calculadoraDirective(){
                     }
                     if ($scope.formula.trim() === "") {
                         $scope.alert.danger.push('La formula esta vacia.');
+                        $scope.resultado = "";
                         return false;
                     }
                     if ($scope.nombreVariable.trim() === "") {
-                        $scope.alert.danger.push('Debe establecer un nombre para la variable.');
+                        $scope.alert.warning.push('Debe establecer un nombre para la variable.');
                         return false;
                     }
                     if (!$scope.calcular()) {
@@ -77,6 +83,19 @@ function calculadoraDirective(){
                     }
                 };
 
+                $scope.insertarAFormula = function(variable){
+                    $scope.formula = $scope.formula + variable;
+                };
+
+                $scope.update = function(){
+                    alertClear();
+                    Calculadora.editVar($scope.editVar, $scope.formula);
+                    $scope.alert.warning = Calculadora.notificaciones.warning;
+                    $scope.alert.danger = Calculadora.notificaciones.danger;
+                    $scope.alert.info = Calculadora.notificaciones.info;
+                    $scope.modoNormal();
+                };
+
                 $scope.editar = function(variable){
                     if (!$scope.modoEdicion) {
                         formulaAux = $scope.formula;
@@ -84,6 +103,7 @@ function calculadoraDirective(){
                     }
                     $scope.modoEdicion = true;
                     $scope.editVar = variable;
+                    $scope.calcular();
                 };
 
                 $scope.eliminar = function(variable){
@@ -97,6 +117,7 @@ function calculadoraDirective(){
                     $scope.modoEdicion = false;
                     $scope.editVar = "";
                     $scope.formula = formulaAux;
+                    $scope.calcular();
                 };
 
                 $scope.clearAlert = function(){
