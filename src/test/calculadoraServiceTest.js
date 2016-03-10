@@ -41,7 +41,7 @@ describe('Prueba del Servicio de la Calculadora', function() {
         // con dependencias que no existen dentro de las variables. 
         // calc.editVar("A", "123.456+f");
         expect(Object.keys(calc.variables).length).toEqual(1);
-        expect(calc.variables["A"]).toEqual("123.456");
+        expect(calc.variables.A).toEqual("123.456");
     });
 
     it('Eliminando variables de la calculadora', function() {

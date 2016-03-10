@@ -15,8 +15,8 @@ function calculadoraDirective(){
         replace: true,
         templateUrl: 'template/calculadora.tpl.html',
         scope: {},
-        controller: ['$scope', 'Calculadora',
-            function ($scope, Calculadora){
+        controller: ['$scope', 'Calculadora', 'Slug',
+            function ($scope, Calculadora, Slug){
                 $scope.formula = "";
                 $scope.resultado = "";
                 $scope.modoEdicion = false;
@@ -59,6 +59,7 @@ function calculadoraDirective(){
 
                 $scope.guardar = function(){
                     alertClear();
+                    $scope.nombreVariable = Slug.slugify($scope.nombreVariable);
                     if (Calculadora.existVar($scope.nombreVariable)) {
                         $scope.alert.danger.push('El nombre de la variable ya fue definido.');
                         return false;

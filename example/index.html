@@ -15,6 +15,22 @@
 <body ng-app="app" ng-controller="AppCtrl" class="container">
     <legend>Calculadora</legend>
     <calculadora></calculadora>
-    <button ng-click="calcular()">Calcular</button>
+    <blockquote>
+        <legend>Controlador externo al componente calculadora</legend>
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Nombre de la Variable</th><th>Formula</th><th>Resultado</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="(variable, formula) in variablesCalc track by $index">
+                    <td>{{ variable }}</td>
+                    <td>{{ formula }}</td>
+                    <td>{{ calcular(formula) }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </blockquote>
 </body>
 </html>

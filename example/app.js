@@ -7,8 +7,11 @@ app.controller('AppCtrl', [
         Calculadora.addVar("jubilacion", "400.68 + sueldo_basico * sueldo_basico + antiguedad ");
         Calculadora.addVar("antiguedad", "sueldo_basico * 3 / 100");
         
-        $scope.calcular = function(){
-            resultado = Calculadora.calcular("sueldo_basico * 3 / 100");
+        $scope.variablesCalc = Calculadora.variables;
+
+        $scope.calcular = function(formula){
+            resultado = Calculadora.calcular(formula);
+            return resultado;
         };
     }
 ]);
