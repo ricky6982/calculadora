@@ -9,14 +9,14 @@
  *              como ser una referencia ciclica. 
  * 
  */
-function calculadoraDirective(){
+function calculadoraDirective() {
     return {
         restrict: 'AE',
         replace: true,
         templateUrl: 'template/calculadora.tpl.html',
         scope: {},
         controller: ['$scope', 'Calculadora', 'Slug',
-            function ($scope, Calculadora, Slug){
+            function($scope, Calculadora, Slug) {
                 $scope.formula = "";
                 $scope.resultado = "";
                 $scope.modoEdicion = false;
@@ -24,30 +24,30 @@ function calculadoraDirective(){
                 $scope.nombreVariable = "";
                 $scope.variables = Calculadora.variables;
                 $scope.alert = {
-                            info: [],
-                            danger: [],
-                            success: [],
-                            warning: []
-                        };
+                    info: [],
+                    danger: [],
+                    success: [],
+                    warning: []
+                };
 
                 var formulaAux = "";
 
-                function alertClear(){
+                function alertClear() {
                     $scope.alert = {
-                            info: [],
-                            danger: [],
-                            success: [],
-                            warning: []
-                        };
+                        info: [],
+                        danger: [],
+                        success: [],
+                        warning: []
+                    };
                 }
 
                 $scope.Calc = {
-                    calcular: function(formula){
+                    calcular: function(formula) {
                         return Calculadora.calcular(formula);
                     }
                 };
 
-                $scope.calcular = function(){
+                $scope.calcular = function() {
                     if ($scope.formula.trim() === "") {
                         $scope.resultado = "";
                         return true;
@@ -55,15 +55,15 @@ function calculadoraDirective(){
                     if (Calculadora.calcular($scope.formula)) {
                         $scope.resultado = Calculadora.calcular($scope.formula);
                         return true;
-                    }else{
+                    } else {
                         $scope.alert.warning.push('La formula no esta bien definida.');
                         $scope.resultado = "";
                         return false;
                     }
-                    
+
                 };
 
-                $scope.guardar = function(){
+                $scope.guardar = function() {
                     alertClear();
                     $scope.nombreVariable = Slug.slugify($scope.nombreVariable);
                     if (Calculadora.existVar($scope.nombreVariable)) {
@@ -85,17 +85,17 @@ function calculadoraDirective(){
                     if (Calculadora.addVar($scope.nombreVariable, $scope.formula)) {
                         $scope.alert.success.push("La variable se guardo correctamente.");
                         $scope.nombreVariable = "";
-                    }else{
+                    } else {
                         $scope.alert.danger.push("La variable no se guardo.");
                         $scope.alert.danger = $scope.alert.danger.concat(Calculadora.notificaciones.danger).concat(Calculadora.notificaciones.warning);
                     }
                 };
 
-                $scope.insertarAFormula = function(variable){
+                $scope.insertarAFormula = function(variable) {
                     $scope.formula = $scope.formula + variable;
                 };
 
-                $scope.update = function(){
+                $scope.update = function() {
                     alertClear();
                     Calculadora.editVar($scope.editVar, $scope.formula);
                     $scope.alert.warning = Calculadora.notificaciones.warning;
@@ -104,7 +104,7 @@ function calculadoraDirective(){
                     $scope.modoNormal();
                 };
 
-                $scope.editar = function(variable){
+                $scope.editar = function(variable) {
                     if (!$scope.modoEdicion) {
                         formulaAux = $scope.formula;
                         $scope.formula = $scope.variables[variable];
@@ -114,21 +114,21 @@ function calculadoraDirective(){
                     $scope.calcular();
                 };
 
-                $scope.eliminar = function(variable){
+                $scope.eliminar = function(variable) {
                     alertClear();
                     Calculadora.deleteVar(variable);
                     $scope.alert.warning = $scope.alert.warning.concat(Calculadora.notificaciones.warning);
                     $scope.alert.danger = $scope.alert.danger.concat(Calculadora.notificaciones.danger);
                 };
 
-                $scope.modoNormal = function(){
+                $scope.modoNormal = function() {
                     $scope.modoEdicion = false;
                     $scope.editVar = "";
                     $scope.formula = formulaAux;
                     $scope.calcular();
                 };
 
-                $scope.clearAlert = function(){
+                $scope.clearAlert = function() {
                     alertClear();
                 };
             }
