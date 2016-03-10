@@ -41,6 +41,12 @@ function calculadoraDirective(){
                         };
                 }
 
+                $scope.Calc = {
+                    calcular: function(formula){
+                        return Calculadora.calcular(formula);
+                    }
+                };
+
                 $scope.calcular = function(){
                     if ($scope.formula.trim() === "") {
                         $scope.resultado = "";
@@ -78,6 +84,7 @@ function calculadoraDirective(){
                     }
                     if (Calculadora.addVar($scope.nombreVariable, $scope.formula)) {
                         $scope.alert.success.push("La variable se guardo correctamente.");
+                        $scope.nombreVariable = "";
                     }else{
                         $scope.alert.danger.push("La variable no se guardo.");
                         $scope.alert.danger = $scope.alert.danger.concat(Calculadora.notificaciones.danger).concat(Calculadora.notificaciones.warning);
