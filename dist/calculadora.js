@@ -326,6 +326,7 @@ angular.module("template/calculadora.tpl.html", []).run(["$templateCache", funct
     "                </button>\n" +
     "                <ul class=\"dropdown-menu dropdown-menu-right\">\n" +
     "                    <li><a data-toggle=\"collapse\" href=\"#collapseSaveFormula\"><i class=\"glyphicon glyphicon-floppy-disk\"></i> Guardar Formula</a></li>\n" +
+    "                    <li><a ng-click=\"borrarFormula()\"><i class=\"glyphicon glyphicon-erase\"></i> Borrar Formula</a></li>\n" +
     "                </ul>\n" +
     "            </div>\n" +
     "        </div>\n" +
@@ -371,29 +372,33 @@ angular.module("template/calculadora.tpl.html", []).run(["$templateCache", funct
     "        <div class=\"col-sm-6\">\n" +
     "            <div class=\"form-inline form-group text-right\">\n" +
     "                <label for=\"\">Resultado</label>\n" +
-    "                <input type=\"text\" ng-model=\"resultado\" class=\"form-control text-right\" disabled>\n" +
+    "                <input type=\"text\" ng-model=\"resultado\" class=\"form-control text-center\" disabled>\n" +
     "            </div>\n" +
-    "            <div class=\"form-group\">\n" +
-    "                <button>7</button>\n" +
-    "                <button>8</button>\n" +
-    "                <button>9</button>\n" +
-    "                <button>/</button>\n" +
-    "                <button>(</button>\n" +
-    "                <br>\n" +
-    "                <button>4</button>\n" +
-    "                <button>5</button>\n" +
-    "                <button>6</button>\n" +
-    "                <button>*</button>\n" +
-    "                <button>)</button>\n" +
-    "                <br>\n" +
-    "                <button>1</button>\n" +
-    "                <button>2</button>\n" +
-    "                <button>3</button>\n" +
-    "                <button>-</button>\n" +
-    "                <br>\n" +
-    "                <button>0</button>\n" +
-    "                <button>+</button>\n" +
-    "                <button ng-click=\"calcular()\">=</button>\n" +
+    "            <div class=\"text-center\" style=\"margin-bottom: px;\">\n" +
+    "                <button ng-click=\"keyPress('7')\" class=\"btn btn-default\" style=\"width: 40px; margin: 2px;\">7</button>\n" +
+    "                <button ng-click=\"keyPress('8')\" class=\"btn btn-default\" style=\"width: 40px; margin: 2px;\">8</button>\n" +
+    "                <button ng-click=\"keyPress('9')\" class=\"btn btn-default\" style=\"width: 40px; margin: 2px;\">9</button>\n" +
+    "                <button ng-click=\"keyPress('(')\" class=\"btn btn-default\" style=\"width: 40px; margin: 2px;\">(</button>\n" +
+    "                <button ng-click=\"keyPress(')')\" class=\"btn btn-default\" style=\"width: 40px; margin: 2px;\">)</button>\n" +
+    "            </div>\n" +
+    "            <div class=\"text-center\" style=\"margin-bottom: px;\">\n" +
+    "                <button ng-click=\"keyPress('4')\" class=\"btn btn-default\" style=\"width: 40px; margin: 2px;\">4</button>\n" +
+    "                <button ng-click=\"keyPress('5')\" class=\"btn btn-default\" style=\"width: 40px; margin: 2px;\">5</button>\n" +
+    "                <button ng-click=\"keyPress('6')\" class=\"btn btn-default\" style=\"width: 40px; margin: 2px;\">6</button>\n" +
+    "                <button ng-click=\"keyPress('/')\" class=\"btn btn-default\" style=\"width: 40px; margin: 2px;\">/</button>\n" +
+    "                <button ng-click=\"keyPress('*')\" class=\"btn btn-default\" style=\"width: 40px; margin: 2px;\">*</button>\n" +
+    "            </div>\n" +
+    "            <div class=\"text-center\" style=\"margin-bottom: px;\">\n" +
+    "                <button ng-click=\"keyPress('1')\" class=\"btn btn-default\" style=\"width: 40px; margin: 2px;\">1</button>\n" +
+    "                <button ng-click=\"keyPress('2')\" class=\"btn btn-default\" style=\"width: 40px; margin: 2px;\">2</button>\n" +
+    "                <button ng-click=\"keyPress('3')\" class=\"btn btn-default\" style=\"width: 40px; margin: 2px;\">3</button>\n" +
+    "                <button ng-click=\"keyPress('-')\" class=\"btn btn-default\" style=\"width: 40px; margin: 2px;\">-</button>\n" +
+    "                <button ng-click=\"keyPress('+')\" class=\"btn btn-default\" style=\"width: 40px; margin: 2px;\">+</button>\n" +
+    "            </div>\n" +
+    "            <div class=\"text-center\" style=\"margin-bottom: px;\">\n" +
+    "                <button ng-click=\"keyPress('0')\" class=\"btn btn-default\" style=\"width: 88px; margin: 2px;\">0</button>\n" +
+    "                <button ng-click=\"keyPress('.')\" class=\"btn btn-default\" style=\"width: 40px; margin: 2px;\">.</button>\n" +
+    "                <button class=\"btn btn-default\" style=\"width: 88px; margin: 2px;\" ng-click=\"calcular()\">=</button>\n" +
     "            </div>\n" +
     "            <!-- Modo Edición -->\n" +
     "            <div class=\"row\">\n" +
@@ -819,6 +824,14 @@ function calculadoraDirective() {
 
                 $scope.insertarAFormula = function(variable) {
                     $scope.formula = $scope.formula + variable;
+                };
+
+                $scope.borrarFormula = function(){
+                    $scope.formula = "";
+                };
+
+                $scope.keyPress = function(key){
+                    $scope.formula += key;
                 };
 
                 $scope.update = function() {

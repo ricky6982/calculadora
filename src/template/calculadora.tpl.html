@@ -13,6 +13,7 @@
                 </button>
                 <ul class="dropdown-menu dropdown-menu-right">
                     <li><a data-toggle="collapse" href="#collapseSaveFormula"><i class="glyphicon glyphicon-floppy-disk"></i> Guardar Formula</a></li>
+                    <li><a ng-click="borrarFormula()"><i class="glyphicon glyphicon-erase"></i> Borrar Formula</a></li>
                 </ul>
             </div>
         </div>
@@ -58,29 +59,33 @@
         <div class="col-sm-6">
             <div class="form-inline form-group text-right">
                 <label for="">Resultado</label>
-                <input type="text" ng-model="resultado" class="form-control text-right" disabled>
+                <input type="text" ng-model="resultado" class="form-control text-center" disabled>
             </div>
-            <div class="form-group">
-                <button>7</button>
-                <button>8</button>
-                <button>9</button>
-                <button>/</button>
-                <button>(</button>
-                <br>
-                <button>4</button>
-                <button>5</button>
-                <button>6</button>
-                <button>*</button>
-                <button>)</button>
-                <br>
-                <button>1</button>
-                <button>2</button>
-                <button>3</button>
-                <button>-</button>
-                <br>
-                <button>0</button>
-                <button>+</button>
-                <button ng-click="calcular()">=</button>
+            <div class="text-center" style="margin-bottom: px;">
+                <button ng-click="keyPress('7')" class="btn btn-default" style="width: 40px; margin: 2px;">7</button>
+                <button ng-click="keyPress('8')" class="btn btn-default" style="width: 40px; margin: 2px;">8</button>
+                <button ng-click="keyPress('9')" class="btn btn-default" style="width: 40px; margin: 2px;">9</button>
+                <button ng-click="keyPress('(')" class="btn btn-default" style="width: 40px; margin: 2px;">(</button>
+                <button ng-click="keyPress(')')" class="btn btn-default" style="width: 40px; margin: 2px;">)</button>
+            </div>
+            <div class="text-center" style="margin-bottom: px;">
+                <button ng-click="keyPress('4')" class="btn btn-default" style="width: 40px; margin: 2px;">4</button>
+                <button ng-click="keyPress('5')" class="btn btn-default" style="width: 40px; margin: 2px;">5</button>
+                <button ng-click="keyPress('6')" class="btn btn-default" style="width: 40px; margin: 2px;">6</button>
+                <button ng-click="keyPress('/')" class="btn btn-default" style="width: 40px; margin: 2px;">/</button>
+                <button ng-click="keyPress('*')" class="btn btn-default" style="width: 40px; margin: 2px;">*</button>
+            </div>
+            <div class="text-center" style="margin-bottom: px;">
+                <button ng-click="keyPress('1')" class="btn btn-default" style="width: 40px; margin: 2px;">1</button>
+                <button ng-click="keyPress('2')" class="btn btn-default" style="width: 40px; margin: 2px;">2</button>
+                <button ng-click="keyPress('3')" class="btn btn-default" style="width: 40px; margin: 2px;">3</button>
+                <button ng-click="keyPress('-')" class="btn btn-default" style="width: 40px; margin: 2px;">-</button>
+                <button ng-click="keyPress('+')" class="btn btn-default" style="width: 40px; margin: 2px;">+</button>
+            </div>
+            <div class="text-center" style="margin-bottom: px;">
+                <button ng-click="keyPress('0')" class="btn btn-default" style="width: 88px; margin: 2px;">0</button>
+                <button ng-click="keyPress('.')" class="btn btn-default" style="width: 40px; margin: 2px;">.</button>
+                <button class="btn btn-default" style="width: 88px; margin: 2px;" ng-click="calcular()">=</button>
             </div>
             <!-- Modo Edición -->
             <div class="row">

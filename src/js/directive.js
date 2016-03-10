@@ -95,6 +95,14 @@ function calculadoraDirective() {
                     $scope.formula = $scope.formula + variable;
                 };
 
+                $scope.borrarFormula = function(){
+                    $scope.formula = "";
+                };
+
+                $scope.keyPress = function(key){
+                    $scope.formula += key;
+                };
+
                 $scope.update = function() {
                     alertClear();
                     Calculadora.editVar($scope.editVar, $scope.formula);
