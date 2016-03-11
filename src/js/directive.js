@@ -14,7 +14,9 @@ function calculadoraDirective() {
         restrict: 'AE',
         replace: true,
         templateUrl: 'template/calculadora.tpl.html',
-        scope: {},
+        scope: {
+            control: '='
+        },
         controller: ['$scope', 'Calculadora', 'Slug',
             function($scope, Calculadora, Slug) {
                 $scope.formula = "";
@@ -140,7 +142,16 @@ function calculadoraDirective() {
                     alertClear();
                 };
             }
-        ]
+        ],
+        link: function(scope, elem, attrs){
+            scope.externalControl = scope.control || {};
+            scope.externalControl.toEdit = function(variable){
+                if (typeof scope.variables[variable] !== "undefined") {
+                    scope.modoNormal();
+                    scope.editar(variable);
+                }
+            };
+        }
     };
 }
 angular.module('calculadora').directive('calculadora', calculadoraDirective);

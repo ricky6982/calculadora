@@ -61,9 +61,9 @@ angular.module("template/calculadora.tpl.html", []).run(["$templateCache", funct
     "        </div>\n" +
     "        <!-- Teclado Numerico -->\n" +
     "        <div class=\"col-sm-6\">\n" +
-    "            <div class=\"form-inline form-group text-right\">\n" +
+    "            <div class=\"form-inline form-group text-center\">\n" +
     "                <label for=\"\">Resultado</label>\n" +
-    "                <input type=\"text\" ng-model=\"resultado\" class=\"form-control text-center\" disabled>\n" +
+    "                <input type=\"text\" ng-model=\"resultado\" class=\"form-control text-right\" disabled>\n" +
     "            </div>\n" +
     "            <div class=\"text-center\" style=\"margin-bottom: px;\">\n" +
     "                <button ng-click=\"keyPress('7')\" class=\"btn btn-default\" style=\"width: 40px; margin: 2px;\">7</button>\n" +

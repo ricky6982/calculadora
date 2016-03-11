@@ -9,6 +9,12 @@ app.controller('AppCtrl', [
         
         $scope.variablesCalc = Calculadora.variables;
 
+        $scope.directiveControl = {};
+
+        $scope.editar = function(){
+            $scope.directiveControl.toEdit($scope.var_edit);
+        };
+
         $scope.calcular = function(formula){
             resultado = Calculadora.calcular(formula);
             return resultado;

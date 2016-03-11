@@ -14,7 +14,7 @@
 </head>
 <body ng-app="app" ng-controller="AppCtrl" class="container">
     <legend>Calculadora</legend>
-    <calculadora></calculadora>
+    <calculadora control="directiveControl"></calculadora>
     <blockquote>
         <legend>Controlador externo al componente calculadora</legend>
         <table class="table table-bordered table-striped">
@@ -32,5 +32,7 @@
             </tbody>
         </table>
     </blockquote>
+    <label for="">Variable <input type="text" ng-model="var_edit"></label>
+    <button ng-click="editar()">Editar</button>
 </body>
 </html>
