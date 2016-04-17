@@ -101,6 +101,10 @@ function calculadoraDirective() {
                     $scope.formula = "";
                 };
 
+                $scope.borrarUltimo = function(){
+                    $scope.formula = $scope.formula.slice(0, -1);
+                };
+
                 $scope.keyPress = function(key){
                     $scope.formula += key;
                 };

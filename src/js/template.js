@@ -2,7 +2,7 @@ angular.module('calculadora.templates', ['template/calculadora.tpl.html']);
 
 angular.module("template/calculadora.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("template/calculadora.tpl.html",
-    "<div class=\"well\" style=\"max-width: 900px;\">\n" +
+    "<div class=\"well well-sm\" style=\"max-width: 900px;\">\n" +
     "    <!-- Modo Normal -->\n" +
     "    <div class=\"form-group\">\n" +
     "        <label ng-hide=\"modoEdicion\">Formula:</label>\n" +
@@ -10,15 +10,9 @@ angular.module("template/calculadora.tpl.html", []).run(["$templateCache", funct
     "        <div class=\"input-group\">\n" +
     "            <input type=\"text\" class=\"form-control input-lg\" ng-model=\"formula\" spellcheck=\"false\">\n" +
     "            <div class=\"input-group-btn\">\n" +
-    "                <button class=\"btn btn-default input-lg\" type=\"button\" ng-click=\"calcular()\">=</button>\n" +
-    "                <button class=\"btn btn-default input-lg dropdown-toggle\" data-toggle=\"dropdown\" ng-hide=\"modoEdicion\">\n" +
-    "                    <span class=\"caret\"></span>\n" +
-    "                    <span class=\"sr-only\">Toggle Dropdown</span>\n" +
-    "                </button>\n" +
-    "                <ul class=\"dropdown-menu dropdown-menu-right\">\n" +
-    "                    <li><a data-toggle=\"collapse\" href=\"#collapseSaveFormula\"><i class=\"glyphicon glyphicon-floppy-disk\"></i> Guardar Formula</a></li>\n" +
-    "                    <li><a ng-click=\"borrarFormula()\"><i class=\"glyphicon glyphicon-erase\"></i> Borrar Formula</a></li>\n" +
-    "                </ul>\n" +
+    "                <button class=\"btn btn-primary btn-lg\" type=\"button\" ng-click=\"calcular()\">=</button>\n" +
+    "                <a class=\"btn btn-success btn-lg\" type=\"button\" data-toggle=\"collapse\" href=\"#collapseSaveFormula\">Guardar</a>\n" +
+    "                <a class=\"btn btn-danger btn-lg\" type=\"button\" ng-click=\"borrarFormula()\"><i class=\"glyphicon glyphicon-erase\"></i> CE</a>\n" +
     "            </div>\n" +
     "        </div>\n" +
     "    </div>\n" +
@@ -43,9 +37,9 @@ angular.module("template/calculadora.tpl.html", []).run(["$templateCache", funct
     "        <!-- Teclas de Variables -->\n" +
     "        <div class=\"col-sm-6\">\n" +
     "            <legend>Variables</legend>\n" +
-    "            <div ng-repeat=\"(key, value) in variables\" style=\"margin-bottom: 3px;\">\n" +
+    "            <div ng-repeat=\"(key, value) in variables\" style=\"margin: 5px; display: inline-block;\">\n" +
     "                <div class=\"btn-group\">\n" +
-    "                    <button type=\"button\" class=\"btn btn-info\" ng-click=\"insertarAFormula(key)\">{{ key }}</button>\n" +
+    "                    <button type=\"button\" class=\"btn btn-default\" ng-click=\"insertarAFormula(key)\">{{ key }}</button>\n" +
     "                    <button type=\"button\" ng-hide=\"modoEdicion\" class=\"btn btn-info dropdown-toggle\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\">\n" +
     "                        <span class=\"caret\"></span>\n" +
     "                        <span class=\"sr-only\">Toggle Dropdown</span>\n" +
@@ -60,48 +54,49 @@ angular.module("template/calculadora.tpl.html", []).run(["$templateCache", funct
     "            </div>\n" +
     "        </div>\n" +
     "        <!-- Teclado Numerico -->\n" +
-    "        <div class=\"col-sm-6\">\n" +
-    "            <div class=\"form-inline form-group text-center\">\n" +
+    "        <div class=\"col-xs-6\">\n" +
+    "            <div class=\"form-inline form-group text-right\">\n" +
     "                <label for=\"\">Resultado</label>\n" +
     "                <input type=\"text\" ng-model=\"resultado\" class=\"form-control text-right\" disabled>\n" +
     "            </div>\n" +
-    "            <div class=\"text-center\" style=\"margin-bottom: px;\">\n" +
-    "                <button ng-click=\"keyPress('7')\" class=\"btn btn-default\" style=\"width: 40px; margin: 2px;\">7</button>\n" +
-    "                <button ng-click=\"keyPress('8')\" class=\"btn btn-default\" style=\"width: 40px; margin: 2px;\">8</button>\n" +
-    "                <button ng-click=\"keyPress('9')\" class=\"btn btn-default\" style=\"width: 40px; margin: 2px;\">9</button>\n" +
-    "                <button ng-click=\"keyPress('(')\" class=\"btn btn-default\" style=\"width: 40px; margin: 2px;\">(</button>\n" +
-    "                <button ng-click=\"keyPress(')')\" class=\"btn btn-default\" style=\"width: 40px; margin: 2px;\">)</button>\n" +
-    "            </div>\n" +
-    "            <div class=\"text-center\" style=\"margin-bottom: px;\">\n" +
-    "                <button ng-click=\"keyPress('4')\" class=\"btn btn-default\" style=\"width: 40px; margin: 2px;\">4</button>\n" +
-    "                <button ng-click=\"keyPress('5')\" class=\"btn btn-default\" style=\"width: 40px; margin: 2px;\">5</button>\n" +
-    "                <button ng-click=\"keyPress('6')\" class=\"btn btn-default\" style=\"width: 40px; margin: 2px;\">6</button>\n" +
-    "                <button ng-click=\"keyPress('/')\" class=\"btn btn-default\" style=\"width: 40px; margin: 2px;\">/</button>\n" +
-    "                <button ng-click=\"keyPress('*')\" class=\"btn btn-default\" style=\"width: 40px; margin: 2px;\">*</button>\n" +
-    "            </div>\n" +
-    "            <div class=\"text-center\" style=\"margin-bottom: px;\">\n" +
-    "                <button ng-click=\"keyPress('1')\" class=\"btn btn-default\" style=\"width: 40px; margin: 2px;\">1</button>\n" +
-    "                <button ng-click=\"keyPress('2')\" class=\"btn btn-default\" style=\"width: 40px; margin: 2px;\">2</button>\n" +
-    "                <button ng-click=\"keyPress('3')\" class=\"btn btn-default\" style=\"width: 40px; margin: 2px;\">3</button>\n" +
-    "                <button ng-click=\"keyPress('-')\" class=\"btn btn-default\" style=\"width: 40px; margin: 2px;\">-</button>\n" +
-    "                <button ng-click=\"keyPress('+')\" class=\"btn btn-default\" style=\"width: 40px; margin: 2px;\">+</button>\n" +
-    "            </div>\n" +
-    "            <div class=\"text-center\" style=\"margin-bottom: px;\">\n" +
-    "                <button ng-click=\"keyPress('0')\" class=\"btn btn-default\" style=\"width: 88px; margin: 2px;\">0</button>\n" +
-    "                <button ng-click=\"keyPress('.')\" class=\"btn btn-default\" style=\"width: 40px; margin: 2px;\">.</button>\n" +
-    "                <button class=\"btn btn-default\" style=\"width: 88px; margin: 2px;\" ng-click=\"calcular()\">=</button>\n" +
+    "            <div style=\"width: 285px; display: inline-block; float: right; margin-bottom: 15px;\">\n" +
+    "              <div>\n" +
+    "                  <button ng-click=\"keyPress('7')\" class=\"btn btn-default\" style=\"width: 40px; margin: 2px;\">7</button>\n" +
+    "                  <button ng-click=\"keyPress('8')\" class=\"btn btn-default\" style=\"width: 40px; margin: 2px;\">8</button>\n" +
+    "                  <button ng-click=\"keyPress('9')\" class=\"btn btn-default\" style=\"width: 40px; margin: 2px;\">9</button>\n" +
+    "                  <button ng-click=\"keyPress('(')\" class=\"btn btn-default\" style=\"width: 40px; margin: 2px;\">(</button>\n" +
+    "                  <button ng-click=\"keyPress(')')\" class=\"btn btn-default\" style=\"width: 40px; margin: 2px;\">)</button>\n" +
+    "                  <button ng-click=\"borrarUltimo()\" class=\"btn btn-danger\" style=\"width: 40px; margin: 2px;\"><i class=\"glyphicon glyphicon-arrow-left\"></i></button>\n" +
+    "              </div>\n" +
+    "              <div>\n" +
+    "                  <button ng-click=\"keyPress('4')\" class=\"btn btn-default\" style=\"width: 40px; margin: 2px;\">4</button>\n" +
+    "                  <button ng-click=\"keyPress('5')\" class=\"btn btn-default\" style=\"width: 40px; margin: 2px;\">5</button>\n" +
+    "                  <button ng-click=\"keyPress('6')\" class=\"btn btn-default\" style=\"width: 40px; margin: 2px;\">6</button>\n" +
+    "                  <button ng-click=\"keyPress('/')\" class=\"btn btn-default\" style=\"width: 40px; margin: 2px;\">/</button>\n" +
+    "                  <button ng-click=\"keyPress('*')\" class=\"btn btn-default\" style=\"width: 40px; margin: 2px;\">*</button>\n" +
+    "              </div>\n" +
+    "              <div>\n" +
+    "                  <button ng-click=\"keyPress('1')\" class=\"btn btn-default\" style=\"width: 40px; margin: 2px;\">1</button>\n" +
+    "                  <button ng-click=\"keyPress('2')\" class=\"btn btn-default\" style=\"width: 40px; margin: 2px;\">2</button>\n" +
+    "                  <button ng-click=\"keyPress('3')\" class=\"btn btn-default\" style=\"width: 40px; margin: 2px;\">3</button>\n" +
+    "                  <button ng-click=\"keyPress('-')\" class=\"btn btn-default\" style=\"width: 40px; margin: 2px;\">-</button>\n" +
+    "                  <button ng-click=\"keyPress('+')\" class=\"btn btn-default\" style=\"width: 40px; margin: 2px;\">+</button>\n" +
+    "              </div>\n" +
+    "              <div>\n" +
+    "                  <button ng-click=\"keyPress('0')\" class=\"btn btn-default\" style=\"width: 88px; margin: 2px;\">0</button>\n" +
+    "                  <button ng-click=\"keyPress('.')\" class=\"btn btn-default\" style=\"width: 40px; margin: 2px;\">.</button>\n" +
+    "                  <button class=\"btn btn-primary\" style=\"width: 88px; margin: 2px;\" ng-click=\"calcular()\">=</button>\n" +
+    "              </div>\n" +
     "            </div>\n" +
     "            <!-- Modo Edición -->\n" +
-    "            <div class=\"row\">\n" +
-    "                <div class=\"col\">\n" +
+    "                <div class=\"col pull-right\">\n" +
     "                    <div ng-show=\"modoEdicion\">\n" +
-    "                        <div class=\"form-group\">\n" +
+    "                        <div>\n" +
     "                            <button class=\"btn btn-primary\" ng-click=\"update()\">Guardar cambios</button>\n" +
-    "                            <button class=\"btn btn-primary\" ng-click=\"modoNormal()\">Modo Normal</button>\n" +
+    "                            <button class=\"btn btn-warning\" ng-click=\"modoNormal()\">Cancelar</button>\n" +
     "                        </div>\n" +
     "                    </div>\n" +
     "                </div>\n" +
-    "            </div>\n" +
     "        </div>\n" +
     "    </div>\n" +
     "    <!-- Alert Success -->\n" +
