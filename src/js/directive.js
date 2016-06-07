@@ -6,8 +6,8 @@
  *              teniendo en cuenta las dependencias definidas en el servicio Calculadora.
  *
  * Fn Guardar:  Guarda una formula en el servicio Calculadora siempre que no presente un conflicto
- *              como ser una referencia ciclica. 
- * 
+ *              como ser una referencia ciclica.
+ *
  */
 function calculadoraDirective() {
     return {
@@ -18,7 +18,7 @@ function calculadoraDirective() {
             control: '='
         },
         controller: ['$scope', 'Calculadora', 'Slug',
-            function($scope, Calculadora, Slug) {
+            function ($scope, Calculadora, Slug) {
                 $scope.formula = "";
                 $scope.resultado = "";
                 $scope.modoEdicion = false;
@@ -44,12 +44,12 @@ function calculadoraDirective() {
                 }
 
                 $scope.Calc = {
-                    calcular: function(formula) {
+                    calcular: function (formula) {
                         return Calculadora.calcular(formula);
                     }
                 };
 
-                $scope.calcular = function() {
+                $scope.calcular = function () {
                     if ($scope.formula.trim() === "") {
                         $scope.resultado = "";
                         return true;
@@ -62,10 +62,9 @@ function calculadoraDirective() {
                         $scope.resultado = "";
                         return false;
                     }
-
                 };
 
-                $scope.guardar = function() {
+                $scope.guardar = function () {
                     alertClear();
                     $scope.nombreVariable = Slug.slugify($scope.nombreVariable);
                     if (Calculadora.existVar($scope.nombreVariable)) {
@@ -93,23 +92,23 @@ function calculadoraDirective() {
                     }
                 };
 
-                $scope.insertarAFormula = function(variable) {
+                $scope.insertarAFormula = function (variable) {
                     $scope.formula = $scope.formula + variable;
                 };
 
-                $scope.borrarFormula = function(){
+                $scope.borrarFormula = function () {
                     $scope.formula = "";
                 };
 
-                $scope.borrarUltimo = function(){
+                $scope.borrarUltimo = function () {
                     $scope.formula = $scope.formula.slice(0, -1);
                 };
 
-                $scope.keyPress = function(key){
+                $scope.keyPress = function (key) {
                     $scope.formula += key;
                 };
 
-                $scope.update = function() {
+                $scope.update = function () {
                     alertClear();
                     Calculadora.editVar($scope.editVar, $scope.formula);
                     $scope.alert.warning = Calculadora.notificaciones.warning;
@@ -118,7 +117,7 @@ function calculadoraDirective() {
                     $scope.modoNormal();
                 };
 
-                $scope.editar = function(variable) {
+                $scope.editar = function (variable) {
                     if (!$scope.modoEdicion) {
                         formulaAux = $scope.formula;
                         $scope.formula = $scope.variables[variable];
@@ -128,28 +127,28 @@ function calculadoraDirective() {
                     $scope.calcular();
                 };
 
-                $scope.eliminar = function(variable) {
+                $scope.eliminar = function (variable) {
                     alertClear();
                     Calculadora.deleteVar(variable);
                     $scope.alert.warning = $scope.alert.warning.concat(Calculadora.notificaciones.warning);
                     $scope.alert.danger = $scope.alert.danger.concat(Calculadora.notificaciones.danger);
                 };
 
-                $scope.modoNormal = function() {
+                $scope.modoNormal = function () {
                     $scope.modoEdicion = false;
                     $scope.editVar = "";
                     $scope.formula = formulaAux;
                     $scope.calcular();
                 };
 
-                $scope.clearAlert = function() {
+                $scope.clearAlert = function () {
                     alertClear();
                 };
             }
         ],
-        link: function(scope, elem, attrs){
+        link: function (scope) {
             scope.externalControl = scope.control || {};
-            scope.externalControl.toEdit = function(variable){
+            scope.externalControl.toEdit = function (variable) {
                 if (typeof scope.variables[variable] !== "undefined") {
                     scope.modoNormal();
                     scope.editar(variable);

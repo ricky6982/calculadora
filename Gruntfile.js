@@ -25,7 +25,7 @@ module.exports = function (grunt){
             },
             build: {
                 src: files.src,
-                dest: '<%= builddir %>/<%= pkg.name %>.js'
+                dest: '<%= builddir %>/<%= pkg.name %>-<%= pkg.version %>.js'
             }
         },
 
@@ -35,7 +35,7 @@ module.exports = function (grunt){
             },
             build: {
                 files: {
-                  '<%= builddir %>/<%= pkg.name %>.min.js': ['<banner:meta.banner>', '<%= concat.build.dest %>']
+                  '<%= builddir %>/<%= pkg.name %>-<%= pkg.version %>.min.js': ['<banner:meta.banner>', '<%= concat.build.dest %>']
                 }
             }
         },
@@ -66,14 +66,6 @@ module.exports = function (grunt){
         },
 
         watch: {
-            startup: {
-                files: [],
-                tasks: ['karma:continuous:start'],
-                options: {
-                    atBegin: true,
-                    spawn: false
-                }
-            },
             sass: {
                 files: ['<%= buildsrc %>/sass/*.scss'],
                 tasks: ['sass']
@@ -85,25 +77,8 @@ module.exports = function (grunt){
             js: {
                 files: ['<%= buildsrc %>/js/**/*.js'],
                 tasks: ['concat', 'uglify', 'jshint'],
-            },
-            karma: {
-                files: ['<%= buildsrc %>/js/**/*.js', '<%= buildsrc %>/test/*.js'],
-                tasks: ['karma:continuous:run'],
-            }
-        },
-
-        karma: {
-            options: {
-                configFile: 'karma.conf.js',
-            },
-            unit: {
-                singleRun: true
-            },
-            continuous: {
-                background: true
             }
         }
-
     });
 
     grunt.registerTask('default', 'Perform a normal build', ['jshint', 'concat', 'uglify', 'karma:unit:run']);

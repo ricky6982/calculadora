@@ -1,8 +1,8 @@
 var app = angular.module('app', ['calculadora']);
 
 app.controller('AppCtrl', [
-    '$scope', 'Calculadora', '$timeout',
-    function($scope, Calculadora, $timeout){
+    '$scope', 'Calculadora',
+    function ($scope, Calculadora) {
         Calculadora.addVar("sueldo_basico", "500");
         Calculadora.addVar("jubilacion", "400.68 + sueldo_basico * sueldo_basico + antiguedad ");
         Calculadora.addVar("antiguedad", "sueldo_basico * 3 / 100");
@@ -16,7 +16,7 @@ app.controller('AppCtrl', [
         };
 
         $scope.calcular = function(formula){
-            resultado = Calculadora.calcular(formula);
+            var resultado = Calculadora.calcular(formula);
             return resultado;
         };
     }

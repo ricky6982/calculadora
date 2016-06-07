@@ -9,18 +9,18 @@
     <h1>Unit Test Results</h1>
     <table cellspacing="0" cellpadding="0" border="0">
       <tr class="overview">
-        <td colspan="3" title="Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.116 Safari/537.36">Browser: Chrome 48.0.2564 (Windows 7 0.0.0)</td>
+        <td colspan="3" title="Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36">Browser: Chrome 50.0.2661 (Windows 7 0.0.0)</td>
       </tr>
       <tr class="overview">
-        <td colspan="3">Timestamp: Fri Mar 11 2016 00:03:52 GMT-0300 (Hora estándar de Argentina)</td>
+        <td colspan="3">Timestamp: Mon Jun 06 2016 22:30:53 GMT-0300 (Hora estándar de Argentina)</td>
       </tr>
       <tr>
         <td colspan="3">
-          8 tests / 
+          16 tests / 
           0 errors / 
           0 failures / 
           0 skipped / 
-          runtime: 0.033s
+          runtime: 0.077s
         </td>
       </tr>
       <tr class="header">
@@ -29,23 +29,63 @@
         <td>Suite / Results</td>
       </tr>
       <tr class="pass">
-        <td>Passed in 0.017s</td>
-        <td>Agregando variables a la calculadora</td>
-        <td>Prueba del Servicio de la Calculadora</td>
-      </tr>
-      <tr class="pass">
-        <td>Passed in 0.007s</td>
-        <td>Prueba de calculo de formulas que esta en dependencia con otras variables</td>
-        <td>Prueba del Servicio de la Calculadora</td>
-      </tr>
-      <tr class="pass">
-        <td>Passed in 0.004s</td>
-        <td>Editando variables de la calculadora</td>
+        <td>Passed in 0.011s</td>
+        <td>Verificar si existe una variable definida en la calculadora.</td>
         <td>Prueba del Servicio de la Calculadora</td>
       </tr>
       <tr class="pass">
         <td>Passed in 0.003s</td>
-        <td>Eliminando variables de la calculadora</td>
+        <td>Una variable que no existe en la calculadora debe devolver falso.</td>
+        <td>Prueba del Servicio de la Calculadora</td>
+      </tr>
+      <tr class="pass">
+        <td>Passed in 0.007s</td>
+        <td>Calculo de formulas que esta en dependencia con variables</td>
+        <td>Prueba del Servicio de la Calculadora</td>
+      </tr>
+      <tr class="pass">
+        <td>Passed in 0.005s</td>
+        <td>Calculo de Formula incorrecta debe lanzar excepción.</td>
+        <td>Prueba del Servicio de la Calculadora</td>
+      </tr>
+      <tr class="pass">
+        <td>Passed in 0.01s</td>
+        <td>Agregar variables a la calculadora</td>
+        <td>Prueba del Servicio de la Calculadora</td>
+      </tr>
+      <tr class="pass">
+        <td>Passed in 0.006s</td>
+        <td>Agregar variable que genera redundancia ciclica debe lanzar excepcion</td>
+        <td>Prueba del Servicio de la Calculadora</td>
+      </tr>
+      <tr class="pass">
+        <td>Passed in 0.005s</td>
+        <td>Agregar variable duplicada debe lanzar excepcion</td>
+        <td>Prueba del Servicio de la Calculadora</td>
+      </tr>
+      <tr class="pass">
+        <td>Passed in 0.004s</td>
+        <td>Editar variable de la calculadora</td>
+        <td>Prueba del Servicio de la Calculadora</td>
+      </tr>
+      <tr class="pass">
+        <td>Passed in 0.005s</td>
+        <td>Editar el valor de variable con un valor vacio deberia arrojar excepción</td>
+        <td>Prueba del Servicio de la Calculadora</td>
+      </tr>
+      <tr class="pass">
+        <td>Passed in 0.006s</td>
+        <td>Editar variable con un valor que genera redundancia tecnica deberia arrojar excepción</td>
+        <td>Prueba del Servicio de la Calculadora</td>
+      </tr>
+      <tr class="pass">
+        <td>Passed in 0.005s</td>
+        <td>Eliminar variables de la calculadora</td>
+        <td>Prueba del Servicio de la Calculadora</td>
+      </tr>
+      <tr class="pass">
+        <td>Passed in 0.004s</td>
+        <td>Eliminar variable que esta en dependencia de otras deberia lanzar excepción</td>
         <td>Prueba del Servicio de la Calculadora</td>
       </tr>
       <tr class="pass">
@@ -54,7 +94,7 @@
         <td>Prueba de funciones de la libreria Toposort</td>
       </tr>
       <tr class="pass">
-        <td>Passed in 0s</td>
+        <td>Passed in 0.004s</td>
         <td>Conversion de Objeto a Array - funcion makeGraph()</td>
         <td>Prueba de funciones de la libreria Toposort</td>
       </tr>
@@ -67,6 +107,10 @@
         <td>Passed in 0s</td>
         <td>Obtener las dependencias que tiene una formula</td>
         <td>Prueba de funciones de la libreria Toposort</td>
+      </tr>
+      <tr class="system-out">
+        <td colspan="3"><strong>System output:</strong><br />Chrome 50.0.2661 (Windows 7 0.0.0) WARN: 'La variable ya esta definida.'
+</td>
       </tr>
     </table>
     <hr/>

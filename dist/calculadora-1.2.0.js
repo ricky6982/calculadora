@@ -1,6 +1,6 @@
 /**
  * Calculadora con capacidad de almacenar variables.
- * @version v1.1.0
+ * @version v1.2.0
  * @link http://ricky6982.github.io/me
  * @license MIT License, http://www.opensource.org/licenses/MIT
  */
@@ -592,58 +592,64 @@ function makeObjectDependency(obj)
 
 
 angular.module('calculadora', ['calculadora.templates', 'slugifier_rck']);
-
-
 /**
  * Servicio de Calculadora
  */
-Calculadora.$inject = ['$parse', '$interpolate'];
-function Calculadora($parse, $interpolate){
+Calculadora.$inject = ['$interpolate'];
+function Calculadora($interpolate) {
     var variables = {};
-    var notificaciones = {
-        success: [],
-        danger: [],
-        warning: [],
-        info: []
-    };
 
-    function clearNotificaciones(){
-        notificaciones.success = [];
-        notificaciones.warning = [];
-        notificaciones.danger = [];
-        notificaciones.info = [];
+    function CalcException(tipo, msj){
+        this.tipo = tipo;
+        this.name = msj;
     }
 
-    function areCorrectVariables(obj){
-        objDep = makeObjectDependency(obj);
-        if (hasCyclicDependency(makeGraph(objDep))) {
-            return false;
-        }
-
-        return true;
+    /**
+     * Verifica si las variables definidas en el objeto son correctas.
+     * @param obj: Conjunto de valores clave-valor que representa variables y sus respectivos valores;
+     * @returns {boolean}
+     */
+    function areCorrectVariables(obj) {
+        var objDep = makeObjectDependency(obj);
+        return !hasCyclicDependency(makeGraph(objDep));
     }
 
-    function resolverDependencia(formula, objDep){
+    /**
+     * Función Recursiva para el calculo de formulas que tienen dependecia de varios niveles.
+     * @param formula: string que define una expresión matematica
+     * @param objDep: variables de las cuales depende la formula
+     * @returns string: formula sin variables dependientes, unicamente con valores numericos y operadores matemáticos.
+     */
+    function resolverDependencia(formula, objDep) {
         var nuevaFormula = angular.copy(formula);
-        dependencias = getDependencies(nuevaFormula);
+        var dependencias = getDependencies(nuevaFormula);
         if (dependencias.length > 0) {
-            angular.forEach(dependencias, function(dependencia){
+            angular.forEach(dependencias, function (dependencia) {
                 var regxp = new RegExp(dependencia, "g");
-                subDependency = " ( " + resolverDependencia(variables[dependencia], objDep) + " ) ";
+                var subDependency = " ( " + resolverDependencia(variables[dependencia], objDep) + " ) ";
                 nuevaFormula = nuevaFormula.replace(regxp, subDependency);
             });
         }
         return nuevaFormula;
     }
 
-    function existVar(variable){
+    /**
+     * @param {string} variable
+     * @returns {boolean}
+     */
+    function existVar(variable) {
         return typeof variables[variable] !== "undefined";
     }
 
-    function itDependsOn(variable){
-        objDep = makeObjectDependency(variables);
-        depends = false;
-        angular.forEach(objDep, function(dependencias, item){
+    /**
+     * Función Privada
+     * @param {string} variable
+     * @returns {boolean}
+     */
+    function itDependsOn(variable) {
+        var objDep = makeObjectDependency(variables);
+        var depends = false;
+        angular.forEach(objDep, function (dependencias) {
             if (dependencias.indexOf(variable) != -1) {
                 depends = true;
             }
@@ -651,66 +657,84 @@ function Calculadora($parse, $interpolate){
         return depends;
     }
 
-    calcular = function(formula){
-        try{
-            objDep = makeObjectDependency(variables);
-            f = resolverDependencia(formula, objDep);
+    /**
+     * @param {string} formula
+     * @returns {float|boolean}
+     */
+    function calcular(formula) {
+        var resultado;
+        try {
+            var objDep = makeObjectDependency(variables);
+            var f = resolverDependencia(formula, objDep);
             resultado = $interpolate("{{ " + f + " }}")();
-        }catch(e){
-            return false;
+        } catch (e) {
+            throw new CalcException('danger', 'La formula no esta definida correctamente.');
         }
         return resultado;
-    };
+    }
 
-    addVar = function(variable, value){
-        clearNotificaciones();
+    /**
+     * @param {string} variable
+     * @param {string|number} value
+     * @throws si la variable ya existe en la calculadora
+     * @throws si la variable genera un error de referencia ciclica
+     */
+    function addVar(variable, value) {
         if (typeof value === "undefined") {
             value = "";
         }
+
         if (existVar(variable)) {
-            notificaciones.warning.push("La variable ya esta definida");
-            return false;
+            console.warn('La variable ya esta definida.');
+            throw new CalcException('warning', 'La variable ya esta definida');
         }
 
         var aux = angular.copy(variables);
         aux[variable] = value;
-        if (areCorrectVariables(aux)) {
-            variables[variable] = value;
-            return true;
+
+        if (!areCorrectVariables(aux)) {
+            throw new CalcException('danger', cyclicDependencyIn);
         }
 
-        notificaciones.danger.push(cyclicDependencyIn);
-        return false;
-    };
+        variables[variable] = value;
+    }
 
-    editVar = function(variable, value){
-        clearNotificaciones();
-        if (value.trim === "") {
-            notificaciones.danger.push('La formula no esta definida correctamente.');
-            return false;
+    /**
+     * @param {string} variable
+     * @param {string|number} value
+     * @throws si value tiene una formula mal definida
+     * @throws si value genera error de dependencia ciclica
+     * @returns {boolean}
+     */
+    function editVar(variable, value) {
+        if (value.trim() === "") {
+            throw new CalcException('danger', 'La formula no esta definida correctamente.');
         }
 
         var aux = angular.copy(variables);
         aux[variable] = value;
-        if (areCorrectVariables(aux)) {
-            variables[variable] = value;
-            notificaciones.info.push('Se actualizo la formula de la variable '+variable);
-            return true;
-        }
-        notificaciones.danger.push(cyclicDependencyIn);
-        return false;
-    };
 
-    deleteVar = function(variable){
-        clearNotificaciones();
+        if (!areCorrectVariables(aux)) {
+            throw new CalcException('danger', cyclicDependencyIn);
+        }
+
+        variables[variable] = value;
+    }
+
+    /**
+     * Eliminar variable almacenada
+     * @param {string} variable: nombre de la variable
+     * @throws si la variable es dependencia de otras variables
+     */
+    function deleteVar(variable) {
         if (existVar(variable)) {
-            if (!itDependsOn(variable)) {
+            if (itDependsOn(variable)) {
+                throw new CalcException('danger', 'La variable ' + variable + ' no puede ser eliminada porque existen otras variables que la necesitan para realizar sus calculos.');
+            } else {
                 delete variables[variable];
-            }else{
-                notificaciones.warning.push('La variable ' + variable + ' no puede ser eliminada porque existen otras variables que la necesitan para realizar sus calculos.');
             }
         }
-    };
+    }
 
     return {
         variables: variables,
@@ -718,8 +742,7 @@ function Calculadora($parse, $interpolate){
         addVar: addVar,
         editVar: editVar,
         deleteVar: deleteVar,
-        calcular: calcular,
-        notificaciones: notificaciones
+        calcular: calcular
     };
 }
 
@@ -732,8 +755,8 @@ angular.module('calculadora').factory('Calculadora', Calculadora);
  *              teniendo en cuenta las dependencias definidas en el servicio Calculadora.
  *
  * Fn Guardar:  Guarda una formula en el servicio Calculadora siempre que no presente un conflicto
- *              como ser una referencia ciclica. 
- * 
+ *              como ser una referencia ciclica.
+ *
  */
 function calculadoraDirective() {
     return {
@@ -744,7 +767,7 @@ function calculadoraDirective() {
             control: '='
         },
         controller: ['$scope', 'Calculadora', 'Slug',
-            function($scope, Calculadora, Slug) {
+            function ($scope, Calculadora, Slug) {
                 $scope.formula = "";
                 $scope.resultado = "";
                 $scope.modoEdicion = false;
@@ -770,12 +793,12 @@ function calculadoraDirective() {
                 }
 
                 $scope.Calc = {
-                    calcular: function(formula) {
+                    calcular: function (formula) {
                         return Calculadora.calcular(formula);
                     }
                 };
 
-                $scope.calcular = function() {
+                $scope.calcular = function () {
                     if ($scope.formula.trim() === "") {
                         $scope.resultado = "";
                         return true;
@@ -788,10 +811,9 @@ function calculadoraDirective() {
                         $scope.resultado = "";
                         return false;
                     }
-
                 };
 
-                $scope.guardar = function() {
+                $scope.guardar = function () {
                     alertClear();
                     $scope.nombreVariable = Slug.slugify($scope.nombreVariable);
                     if (Calculadora.existVar($scope.nombreVariable)) {
@@ -819,23 +841,23 @@ function calculadoraDirective() {
                     }
                 };
 
-                $scope.insertarAFormula = function(variable) {
+                $scope.insertarAFormula = function (variable) {
                     $scope.formula = $scope.formula + variable;
                 };
 
-                $scope.borrarFormula = function(){
+                $scope.borrarFormula = function () {
                     $scope.formula = "";
                 };
 
-                $scope.borrarUltimo = function(){
+                $scope.borrarUltimo = function () {
                     $scope.formula = $scope.formula.slice(0, -1);
                 };
 
-                $scope.keyPress = function(key){
+                $scope.keyPress = function (key) {
                     $scope.formula += key;
                 };
 
-                $scope.update = function() {
+                $scope.update = function () {
                     alertClear();
                     Calculadora.editVar($scope.editVar, $scope.formula);
                     $scope.alert.warning = Calculadora.notificaciones.warning;
@@ -844,7 +866,7 @@ function calculadoraDirective() {
                     $scope.modoNormal();
                 };
 
-                $scope.editar = function(variable) {
+                $scope.editar = function (variable) {
                     if (!$scope.modoEdicion) {
                         formulaAux = $scope.formula;
                         $scope.formula = $scope.variables[variable];
@@ -854,28 +876,28 @@ function calculadoraDirective() {
                     $scope.calcular();
                 };
 
-                $scope.eliminar = function(variable) {
+                $scope.eliminar = function (variable) {
                     alertClear();
                     Calculadora.deleteVar(variable);
                     $scope.alert.warning = $scope.alert.warning.concat(Calculadora.notificaciones.warning);
                     $scope.alert.danger = $scope.alert.danger.concat(Calculadora.notificaciones.danger);
                 };
 
-                $scope.modoNormal = function() {
+                $scope.modoNormal = function () {
                     $scope.modoEdicion = false;
                     $scope.editVar = "";
                     $scope.formula = formulaAux;
                     $scope.calcular();
                 };
 
-                $scope.clearAlert = function() {
+                $scope.clearAlert = function () {
                     alertClear();
                 };
             }
         ],
-        link: function(scope, elem, attrs){
+        link: function (scope) {
             scope.externalControl = scope.control || {};
-            scope.externalControl.toEdit = function(variable){
+            scope.externalControl.toEdit = function (variable) {
                 if (typeof scope.variables[variable] !== "undefined") {
                     scope.modoNormal();
                     scope.editar(variable);

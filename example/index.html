@@ -9,7 +9,7 @@
     <script src="../bower_components/jquery/dist/jquery.min.js"></script>
     <script src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="../bower_components/angular/angular.min.js"></script>
-    <script src="../dist/calculadora.js"></script>
+    <script src="../dist/calculadora-1.2.0.js"></script>
     <script src="app.js"></script>
 </head>
 <body ng-app="app" ng-controller="AppCtrl" class="container">
@@ -32,6 +32,7 @@
             </tbody>
         </table>
     </blockquote>
+    <div class="form">{{ variablesCalc }}</div>
     <label for="">Variable <input type="text" ng-model="var_edit"></label>
     <button ng-click="editar()">Editar</button>
 </body>
